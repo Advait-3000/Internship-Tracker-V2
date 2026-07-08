@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Mail, Lock, EyeOff, Eye } from 'lucide-react';
-import { signInStart, signInSuccess } from '../authSlice';
+import { loginUser, clearError } from '../authSlice';
 
 const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [formData, setFormData] = useState({
@@ -56,17 +56,17 @@ const SignIn = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    if (error) {
+      dispatch(clearError());
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(signInStart());
-    
-    // Simulate API delay
-    setTimeout(() => {
-      dispatch(signInSuccess({ email: formData.email, name: 'User' }));
+    const resultAction = await dispatch(loginUser({ email: formData.email, password: formData.password }));
+    if (loginUser.fulfilled.match(resultAction)) {
       navigate('/dashboard');
-    }, 1000);
+    }
   };
 
   return (
@@ -77,6 +77,12 @@ const SignIn = () => {
           <div className="w-full max-w-md my-auto">
             <h1 className="text-3xl font-semibold text-center text-gray-900 mb-2">Sign In to Account</h1>
             <p className="text-center text-blue-600 font-medium mb-6 text-sm">Start your 14-day free trial.</p>
+
+            {error && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-100 text-sm text-red-600 font-medium text-center">
+                {error}
+              </div>
+            )}
 
             <form className="space-y-3" onSubmit={handleSubmit}>
               <div className="space-y-1">

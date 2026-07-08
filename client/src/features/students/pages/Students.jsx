@@ -2,11 +2,12 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../auth/authSlice";
-import { fetchDashboardStats, fetchChartData } from "../dashboardSlice";
+import { fetchDashboardStats } from "../../dashboard/dashboardSlice";
 import {
   fetchStudents,
   fetchStudentProfiles,
-} from "../../students/studentsSlice";
+  fetchDepartmentStats
+} from "../studentsSlice";
 import {
   LayoutDashboard,
   Users,
@@ -31,6 +32,7 @@ import {
   LayoutGrid,
   Filter,
   Loader2,
+  ChevronDown
 } from "lucide-react";
 
 // ============================================================
@@ -125,8 +127,6 @@ const getStatusClasses = (status) => {
 // SUB-COMPONENTS
 // ============================================================
 
-// ---- Loading Skeleton ----
-
 const SkeletonCard = () => (
   <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-pulse">
     <div className="flex justify-between items-start">
@@ -140,15 +140,6 @@ const SkeletonCard = () => (
   </div>
 );
 
-const SkeletonChart = () => (
-  <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-pulse flex-1">
-    <div className="h-5 w-40 bg-gray-200 rounded mb-4" />
-    <div className="h-48 bg-gray-50 rounded-xl" />
-  </div>
-);
-
-// ---- Sidebar ----
-
 const Sidebar = ({
   activeItem,
   sidebarOpen,
@@ -161,6 +152,7 @@ const Sidebar = ({
   onMouseLeave,
 }) => {
   const navigate = useNavigate();
+
   return (
     <>
       {/* Mobile backdrop overlay */}
@@ -277,8 +269,6 @@ const Sidebar = ({
   );
 };
 
-// ---- Stat Card ----
-
 const StatCard = ({ stat }) => {
   const mapping = STAT_ICON_MAP[stat.title] || {
     icon: FileText,
@@ -316,339 +306,11 @@ const StatCard = ({ stat }) => {
   );
 };
 
-// ---- Report Submission Line Chart ----
-
-const ReportSubmissionChart = ({
-  reportData,
-  activeFilter,
-  setActiveFilter,
-}) => {
-  const padL = 40;
-  const padR = 20;
-  const padT = 10;
-  const padB = 30;
-  const chartW = 560;
-  const chartH = 220;
-  const plotW = chartW - padL - padR;
-  const plotH = chartH - padT - padB;
-  const yLabels = [0, 20, 40, 60, 80, 100];
-
-  const labels = reportData.labels || [];
-  const datasets = reportData.datasets || {};
-
-  const xStep = labels.length > 1 ? plotW / (labels.length - 1) : plotW;
-  const yScale = plotH / 100;
-
-  const toPoints = (data) =>
-    data
-      .map((v, i) => `${padL + i * xStep},${padT + plotH - v * yScale}`)
-      .join(" ");
-
-  return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex-[3] min-w-0">
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h3 className="text-base font-bold text-gray-900">Report Submission</h3>
-        <div className="flex items-center gap-4 text-xs text-gray-500">
-          {["Daily", "Weekly", "Monthly"].map((f) => (
-            <label key={f} className="flex items-center gap-1.5 cursor-pointer">
-              <input
-                type="radio"
-                name="reportFilter"
-                checked={activeFilter === f}
-                onChange={() => setActiveFilter(f)}
-                className="accent-indigo-600 w-3 h-3"
-              />
-              {f}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {labels.length === 0 ? (
-        <div className="h-48 flex items-center justify-center text-gray-400 text-sm">
-          No chart data available
-        </div>
-      ) : (
-        <>
-          <svg
-            viewBox={`0 0 ${chartW} ${chartH + 20}`}
-            className="w-full h-auto"
-          >
-            {/* Horizontal grid lines & Y-axis labels */}
-            {yLabels.map((val) => {
-              const y = padT + plotH - val * yScale;
-              return (
-                <g key={val}>
-                  <line
-                    x1={padL}
-                    y1={y}
-                    x2={chartW - padR}
-                    y2={y}
-                    stroke="#F3F4F6"
-                    strokeWidth="1"
-                  />
-                  <text
-                    x={padL - 8}
-                    y={y + 4}
-                    textAnchor="end"
-                    fill="#9CA3AF"
-                    fontSize="10"
-                  >
-                    {val}
-                  </text>
-                </g>
-              );
-            })}
-
-            {/* Vertical grid lines */}
-            {labels.map((_, i) => {
-              const x = padL + i * xStep;
-              return (
-                <line
-                  key={i}
-                  x1={x}
-                  y1={padT}
-                  x2={x}
-                  y2={padT + plotH}
-                  stroke="#F3F4F6"
-                  strokeWidth="1"
-                />
-              );
-            })}
-
-            {/* Shaded area fills under each line */}
-            {Object.entries(datasets).map(([key, line]) => {
-              const pts = line.points.map(
-                (v, i) => `${padL + i * xStep},${padT + plotH - v * yScale}`,
-              );
-              const d = `M ${pts[0]} ${pts
-                .slice(1)
-                .map((p) => `L ${p}`)
-                .join(
-                  " ",
-                )} L ${padL + (labels.length - 1) * xStep},${padT + plotH} L ${padL},${padT + plotH} Z`;
-              return (
-                <path
-                  key={`area-${key}`}
-                  d={d}
-                  fill={line.color}
-                  opacity="0.06"
-                />
-              );
-            })}
-
-            {/* Lines */}
-            {Object.entries(datasets).map(([key, line]) => (
-              <polyline
-                key={key}
-                fill="none"
-                stroke={line.color}
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                points={toPoints(line.points)}
-              />
-            ))}
-
-            {/* Data dots */}
-            {Object.entries(datasets).map(([key, line]) =>
-              line.points.map((v, i) => (
-                <circle
-                  key={`${key}-${i}`}
-                  cx={padL + i * xStep}
-                  cy={padT + plotH - v * yScale}
-                  r="3"
-                  fill="white"
-                  stroke={line.color}
-                  strokeWidth="2"
-                />
-              )),
-            )}
-
-            {/* X-axis labels */}
-            {labels.map((day, i) => (
-              <text
-                key={day}
-                x={padL + i * xStep}
-                y={chartH + 12}
-                textAnchor="middle"
-                fill="#9CA3AF"
-                fontSize="9"
-              >
-                {day}
-              </text>
-            ))}
-          </svg>
-
-          {/* Legend */}
-          <div className="flex items-center justify-center gap-6 mt-3">
-            {Object.values(datasets).map((line) => (
-              <div
-                key={line.label}
-                className="flex items-center gap-1.5 text-xs text-gray-500"
-              >
-                <span
-                  className="w-2.5 h-2.5 rounded-full inline-block"
-                  style={{ backgroundColor: line.color }}
-                />
-                {line.label}
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-// ---- Internship Status Donut Chart ----
-
-const InternshipStatusChart = ({
-  statusData,
-  activeFilter,
-  setActiveFilter,
-}) => {
-  const cx = 150;
-  const cy = 150;
-
-  const rings = [
-    {
-      label: "Computer",
-      color: "#38BDF8",
-      bgColor: "#E0F2FE",
-      radius: 105,
-      percentage: statusData.computer,
-      strokeW: 22,
-    },
-    {
-      label: "IT",
-      color: "#FB7185",
-      bgColor: "#FFE4E6",
-      radius: 78,
-      percentage: statusData.it,
-      strokeW: 22,
-    },
-    {
-      label: "EXTC",
-      color: "#A78BFA",
-      bgColor: "#EDE9FE",
-      radius: 51,
-      percentage: statusData.extc,
-      strokeW: 22,
-    },
-  ];
-
-  const circumLabels = [
-    0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550,
-  ];
-
-  return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex-[2] min-w-0">
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h3 className="text-base font-bold text-gray-900">Internship Status</h3>
-        <div className="flex items-center gap-4 text-xs text-gray-500">
-          {["Daily", "Weekly", "Monthly"].map((f) => (
-            <label key={f} className="flex items-center gap-1.5 cursor-pointer">
-              <input
-                type="radio"
-                name="statusFilter"
-                checked={activeFilter === f}
-                onChange={() => setActiveFilter(f)}
-                className="accent-indigo-600 w-3 h-3"
-              />
-              {f}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-6">
-        <svg
-          viewBox="0 0 300 300"
-          className="w-full max-w-[240px] h-auto mx-auto flex-shrink-0"
-        >
-          {/* Circumference numeric labels */}
-          {circumLabels.map((label, i) => {
-            const angle = ((i * 30 - 90) * Math.PI) / 180;
-            const lx = cx + 138 * Math.cos(angle);
-            const ly = cy + 138 * Math.sin(angle);
-            return (
-              <text
-                key={label}
-                x={lx}
-                y={ly}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill="#9CA3AF"
-                fontSize="8"
-              >
-                {label}
-              </text>
-            );
-          })}
-
-          {/* Background rings (unfilled track) */}
-          {rings.map((ring) => (
-            <circle
-              key={`bg-${ring.label}`}
-              cx={cx}
-              cy={cy}
-              r={ring.radius}
-              fill="none"
-              stroke={ring.bgColor}
-              strokeWidth={ring.strokeW}
-            />
-          ))}
-
-          {/* Foreground arcs (filled portion) */}
-          {rings.map((ring) => {
-            const circ = 2 * Math.PI * ring.radius;
-            const dashLen = (ring.percentage / 100) * circ;
-            return (
-              <circle
-                key={`fg-${ring.label}`}
-                cx={cx}
-                cy={cy}
-                r={ring.radius}
-                fill="none"
-                stroke={ring.color}
-                strokeWidth={ring.strokeW}
-                strokeLinecap="round"
-                strokeDasharray={`${dashLen} ${circ}`}
-                transform={`rotate(-90 ${cx} ${cy})`}
-              />
-            );
-          })}
-
-          {/* Center white circle (donut hole) */}
-          <circle cx={cx} cy={cy} r="28" fill="white" />
-        </svg>
-
-        {/* Legend */}
-        <div className="flex flex-col gap-3 flex-shrink-0">
-          {rings.map((ring) => (
-            <div
-              key={ring.label}
-              className="flex items-center gap-2 text-xs whitespace-nowrap"
-            >
-              <span
-                className="w-2.5 h-2.5 rounded-full inline-block"
-                style={{ backgroundColor: ring.color }}
-              />
-              <span className="text-gray-600 font-medium">{ring.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // ============================================================
-// MAIN DASHBOARD COMPONENT
+// MAIN STUDENTS PAGE COMPONENT
 // ============================================================
 
-const Dashboard = () => {
+const Students = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -657,14 +319,11 @@ const Dashboard = () => {
   const {
     systemStatus,
     stats,
-    reportSubmission,
-    internshipStatus,
     loading: dashboardLoading,
-    chartsLoading,
-    error: dashboardError,
   } = useSelector((state) => state.dashboard);
   const {
     list: studentsList,
+    departmentStats,
     profiles: studentProfiles,
     loading: studentsLoading,
     profilesLoading,
@@ -676,10 +335,8 @@ const Dashboard = () => {
   const [isManual, setIsManual] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [viewMode, setViewMode] = useState("table");
+  const [viewMode, setViewMode] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
-  const [reportFilter, setReportFilter] = useState("Daily");
-  const [statusFilter, setStatusFilter] = useState("Daily");
 
   const handleSidebarMouseEnter = () => {
     if (!isManual && window.innerWidth >= 1024) {
@@ -713,9 +370,9 @@ const Dashboard = () => {
   // ── Fetch data on mount ──
   useEffect(() => {
     dispatch(fetchDashboardStats());
-    dispatch(fetchChartData());
     dispatch(fetchStudents());
     dispatch(fetchStudentProfiles());
+    dispatch(fetchDepartmentStats());
   }, [dispatch]);
 
   // ── Live clock ──
@@ -741,11 +398,22 @@ const Dashboard = () => {
     [searchQuery, studentsList],
   );
 
+  const filteredStudentProfiles = useMemo(
+    () =>
+      studentProfiles.filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.achievements.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.badge.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
+    [searchQuery, studentProfiles],
+  );
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
       <Sidebar
-        activeItem="Dashboard"
+        activeItem="Students"
         sidebarOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         onLogout={handleLogout}
@@ -763,85 +431,85 @@ const Dashboard = () => {
         }`}
       >
         {/* ── Top Header ── */}
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 sm:px-6 py-3 flex items-center gap-4">
-          {/* Mobile hamburger */}
-          <button
-            className="lg:hidden p-1"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="w-5 h-5 text-gray-600" />
-          </button>
-
-          {/* Breadcrumb & Sidebar Toggle */}
-          <div className="flex items-center gap-3">
+        <header className="sticky top-0 z-30 bg-white border-b border-gray-100 px-4 sm:px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {/* Mobile hamburger */}
             <button
-              onClick={handleToggleManual}
-              title={
-                isManual
-                  ? "Sidebar: Manual (Pinned) - Click for Auto-Collapse"
-                  : "Sidebar: Auto-Collapse - Click to Pin Open"
-              }
-              className={`p-2 rounded-xl transition-all cursor-pointer flex items-center gap-2 group border ${
-                isManual
-                  ? "bg-indigo-50 text-indigo-600 border-indigo-200 shadow-2xs font-semibold"
-                  : "text-gray-600 border-transparent hover:bg-gray-100 hover:text-indigo-600"
-              }`}
+              className="lg:hidden p-1"
+              onClick={() => setSidebarOpen(true)}
             >
-              <LayoutDashboard className="w-5 h-5 shrink-0" />
-              <span className="hidden sm:inline text-xs px-2 py-0.5 rounded-md bg-white/80 border border-gray-200/60 text-gray-700 shadow-3xs">
-                {/* {isManual ? 'Manual' : 'Auto'} */}
-              </span>
+              <Menu className="w-6 h-6 text-gray-600" />
             </button>
-            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
-              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-              <span>Dashboards</span>
-              <span className="text-gray-300">/</span>
-              <span className="text-gray-800 font-medium">Default</span>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#262626] tracking-tight">Students</h1>
           </div>
 
-          {/* Search */}
-          <div className="flex-1 max-w-md mx-auto">
-            <div className="relative">
+          <div className="flex items-center gap-4">
+            {/* Search */}
+            <div className="hidden sm:block relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search"
                 className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
-          </div>
-
-          {/* Right icon buttons */}
-          <div className="hidden sm:flex items-center gap-1">
-            {[Sun, Smile, Bell, Bookmark].map((Icon, i) => (
-              <button
-                key={i}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative"
-              >
-                <Icon className="w-[18px] h-[18px] text-gray-500" />
-                {Icon === Bell && (
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
-                )}
-              </button>
-            ))}
-            <button className="ml-2 flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-              <Filter className="w-3.5 h-3.5" />
+            
+            {/* Filter */}
+            <button className="hidden sm:flex items-center gap-1.5 px-3 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+              <Filter className="w-4 h-4" />
               Filter
+            </button>
+            
+            {/* Today Dropdown */}
+            <button className="hidden sm:flex items-center gap-1.5 px-3 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+              Today
+              <ChevronDown className="w-4 h-4" />
             </button>
           </div>
         </header>
 
         {/* ── Error Banner ── */}
-        {(dashboardError || studentsError) && (
+        {studentsError && (
           <div className="mx-4 sm:mx-6 mt-4 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 flex items-center gap-2">
             <span className="font-medium">Error:</span>
-            {dashboardError || studentsError}
+            {studentsError}
           </div>
         )}
 
         {/* ── Scrollable Main Content ── */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+          
+          {/* Department Pills Section */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {departmentStats.map((dept, idx) => {
+              const colors = [
+                "bg-blue-600 shadow-blue-200", // AIDS
+                "bg-green-600 shadow-green-200", // AIML
+                "bg-amber-500 shadow-amber-200", // CSE
+                "bg-purple-600 shadow-purple-200", // IT
+                "bg-rose-500 shadow-rose-200", // ECS
+                "bg-blue-500 shadow-blue-200", // R & A
+                "bg-green-500 shadow-green-200", // EXTC
+                "bg-amber-400 shadow-amber-200", // Civil
+                "bg-indigo-500 shadow-indigo-200", // Electrical
+                "bg-teal-500 shadow-teal-200", // Mechanical
+              ];
+              const color = colors[idx % colors.length];
+
+              return (
+                <div key={idx} className="bg-white border border-gray-100 rounded-[20px] px-4 py-4 shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-4 cursor-pointer">
+                  <div className={`w-12 h-12 rounded-[14px] flex items-center justify-center text-white shadow-lg ${color} flex-shrink-0`}>
+                    <Building2 className="w-6 h-6 stroke-[1.5px]" />
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-extrabold text-gray-900 tracking-tight leading-none mb-1">{dept.count}</h4>
+                    <p className="text-[11px] font-bold text-gray-500 tracking-wide uppercase">{dept.label}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
           {/* Row 1 & 2: System Status + 6 Stat Cards */}
           <div className="flex flex-col lg:flex-row gap-4">
             {/* System Status Card */}
@@ -899,29 +567,6 @@ const Dashboard = () => {
                   ))
                 : stats.map((stat, i) => <StatCard key={i} stat={stat} />)}
             </div>
-          </div>
-
-          {/* Row 3: Charts — with loading skeletons */}
-          <div className="flex flex-col lg:flex-row gap-4">
-            {chartsLoading ? (
-              <>
-                <SkeletonChart />
-                <SkeletonChart />
-              </>
-            ) : (
-              <>
-                <ReportSubmissionChart
-                  reportData={reportSubmission}
-                  activeFilter={reportFilter}
-                  setActiveFilter={setReportFilter}
-                />
-                <InternshipStatusChart
-                  statusData={internshipStatus}
-                  activeFilter={statusFilter}
-                  setActiveFilter={setStatusFilter}
-                />
-              </>
-            )}
           </div>
 
           {/* Row 4: Students Reports */}
@@ -1057,18 +702,24 @@ const Dashboard = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {studentProfiles.map((card, i) => (
-                      <div
-                        key={i}
-                        className="flex gap-4 p-4 rounded-2xl border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all duration-200"
-                      >
-                        <img
-                          src={card.avatar}
-                          alt={card.name}
-                          className="w-20 h-24 rounded-xl object-cover flex-shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1.5">
+                    {filteredStudentProfiles.length === 0 ? (
+                      <div className="col-span-1 md:col-span-2 py-8 text-center text-gray-400 text-sm">
+                        No students found matching &quot;{searchQuery}&quot;
+                      </div>
+                    ) : (
+                      filteredStudentProfiles.map((card, idx) => (
+                        <div
+                          key={card.id}
+                          onClick={() => navigate(`/students/profile/${card.id}`)}
+                          className={`flex gap-4 p-4 rounded-2xl border ${idx === 0 ? 'border-blue-500 shadow-sm' : 'border-gray-200'} bg-white hover:shadow-md hover:border-blue-300 transition-all duration-200 cursor-pointer group`}
+                        >
+                          <img
+                            src={card.avatar}
+                            alt={card.name}
+                            className="w-20 h-24 rounded-xl object-cover flex-shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-1.5">
                             <span
                               className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 ${
                                 card.badgeType === "green"
@@ -1086,7 +737,7 @@ const Dashboard = () => {
                               </span>
                             </div>
                           </div>
-                          <h4 className="text-sm font-bold text-gray-900 truncate">
+                          <h4 className="text-sm font-bold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
                             {card.name}
                           </h4>
                           <p className="text-[11px] text-blue-600 leading-snug mt-1 line-clamp-2">
@@ -1104,7 +755,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )))}
                   </div>
                 )}
               </div>
@@ -1116,4 +767,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Students;

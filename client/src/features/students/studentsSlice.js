@@ -100,6 +100,8 @@ export const fetchStudents = createAsyncThunk(
   },
 );
 
+const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" fill="%23e2e8f0"/><path d="M12 12.5c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="%2394a3b8"/></svg>';
+
 /**
  * Fetches top student profile cards (Top Rank / Top Student).
  * TODO: Replace mock return with `await axiosInstance.get('/students/profiles')`
@@ -115,41 +117,67 @@ export const fetchStudentProfiles = createAsyncThunk(
 
       return [
         {
+          id: "advait-warang",
           name: "Advait Warang",
           badge: "Top Rank",
           badgeType: "green",
           rating: 5.1,
-          avatar: "https://i.pravatar.cc/150?img=11",
+          avatar: DEFAULT_AVATAR,
           achievements:
             "BCG / XLRI / National Winner Citi Leadership Award'21 / P&G ELP'21 / National Runners-Up..",
           tags: ["#Case Study Competio...", "#Consulting", "+11"],
         },
         {
+          id: "parth-bhalala",
           name: "Parth Bhalala",
           badge: "Top Student",
           badgeType: "orange",
           rating: 4.9,
-          avatar: "https://i.pravatar.cc/150?img=33",
+          avatar: "/parth1.png",
           achievements:
             "BCG / XLRI / National Winner Citi Leadership Award'21 / P&G ELP'21 / National Runners-Up..",
           tags: ["#Case Study Competio...", "#Consulting", "+11"],
         },
         {
+          id: "sahil-panchigar",
           name: "Sahil Panchigar",
           badge: "Top Rank",
           badgeType: "green",
           rating: 5.1,
-          avatar: "https://i.pravatar.cc/150?img=14",
+          avatar: DEFAULT_AVATAR,
           achievements:
             "BCG / XLRI / National Winner Citi Leadership Award'21 / P&G ELP'21 / National Runners-Up..",
           tags: ["#Case Study Competio...", "#Consulting", "+11"],
         },
         {
+          id: "yashwant-singh",
           name: "Yashwant Singh",
           badge: "Top Rank",
           badgeType: "green",
           rating: 5.1,
-          avatar: "https://i.pravatar.cc/150?img=53",
+          avatar: DEFAULT_AVATAR,
+          achievements:
+            "BCG / XLRI / National Winner Citi Leadership Award'21 / P&G ELP'21 / National Runners-Up..",
+          tags: ["#Case Study Competio...", "#Consulting", "+11"],
+        },
+        {
+          id: "shubham",
+          name: "Shubham",
+          badge: "Top Rank",
+          badgeType: "orange",
+          rating: 4.8,
+          avatar: DEFAULT_AVATAR,
+          achievements:
+            "BCG / XLRI / National Winner Citi Leadership Award'21 / P&G ELP'21 / National Runners-Up..",
+          tags: ["#Case Study Competio...", "#Consulting", "+11"],
+        },
+        {
+          id: "sharvari",
+          name: "Sharvari",
+          badge: "Top Student",
+          badgeType: "green",
+          rating: 5.0,
+          avatar: DEFAULT_AVATAR,
           achievements:
             "BCG / XLRI / National Winner Citi Leadership Award'21 / P&G ELP'21 / National Runners-Up..",
           tags: ["#Case Study Competio...", "#Consulting", "+11"],
@@ -161,6 +189,32 @@ export const fetchStudentProfiles = createAsyncThunk(
       );
     }
   },
+);
+
+/**
+ * Fetches department statistics (pill cards).
+ */
+export const fetchDepartmentStats = createAsyncThunk(
+  "students/fetchDepartmentStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      return [
+        { label: 'B.Tech AIDS', count: 80, color: 'bg-blue-100', text: 'text-blue-700' },
+        { label: 'AIML', count: 89, color: 'bg-green-100', text: 'text-green-700' },
+        { label: 'CSE(Cyber)', count: 56, color: 'bg-orange-100', text: 'text-orange-700' },
+        { label: 'COMPS', count: 107, color: 'bg-purple-100', text: 'text-purple-700' },
+        { label: 'IT', count: 98, color: 'bg-teal-100', text: 'text-teal-700' },
+        { label: 'R & A', count: 3, color: 'bg-blue-100', text: 'text-blue-700' },
+        { label: 'EXTC', count: 14, color: 'bg-green-100', text: 'text-green-700' },
+        { label: 'Civil', count: 10, color: 'bg-yellow-100', text: 'text-yellow-700' },
+        { label: 'ECS', count: 7, color: 'bg-purple-100', text: 'text-purple-700' },
+        { label: 'ELEC', count: 15, color: 'bg-teal-100', text: 'text-teal-700' },
+      ];
+    } catch (error) {
+      return rejectWithValue("Failed to fetch department stats");
+    }
+  }
 );
 
 // ============================================================
@@ -178,6 +232,7 @@ const initialState = {
   loading: false,
   profilesLoading: false,
   error: null,
+  departmentStats: [],
 };
 
 // ============================================================
@@ -219,6 +274,18 @@ const studentsSlice = createSlice({
       })
       .addCase(fetchStudentProfiles.rejected, (state, action) => {
         state.profilesLoading = false;
+        state.error = action.payload;
+      });
+
+    // ── fetchDepartmentStats ──
+    builder
+      .addCase(fetchDepartmentStats.pending, (state) => {
+        // optionally handle loading
+      })
+      .addCase(fetchDepartmentStats.fulfilled, (state, action) => {
+        state.departmentStats = action.payload;
+      })
+      .addCase(fetchDepartmentStats.rejected, (state, action) => {
         state.error = action.payload;
       });
   },
