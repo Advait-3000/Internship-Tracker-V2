@@ -178,21 +178,64 @@ const Heatmap = ({ grid }) => {
 
   const getColor = (intensity) => {
     switch(intensity) {
-      case 1: return "#22c55e"; // Present: Green
-      case 0: return "#ef4444"; // Absent: Red
+      case 4: return "#1e9e3c"; // 100% Active: Dark green
+      case 3: return "#3dc25a"; // 75% Active: Medium green
+      case 2: return "#7ddb8d"; // 50% Active: Light green
+      case 1: return "#bcefc3"; // 25% Active: Very light green
+      case 0: return "#ffb8b8"; // 0% Active: Red/Pink
       default: return "#f3f4f6";
     }
   };
 
+  // Group columns into months (assuming 4 weeks per month)
+  const MONTHS = ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+  const blocks = [];
+  for (let i = 0; i < MONTHS.length; i++) {
+    blocks.push(grid.slice(i * 4, (i + 1) * 4));
+  }
+
   return (
-    <div className="flex gap-[3px] overflow-x-auto pb-2 min-h-[100px]">
-      {grid.map((col, i) => (
-        <div key={i} className="flex flex-col gap-[3px]">
-          {col.map((intensity, j) => (
-            <div key={j} className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: getColor(intensity) }} />
-          ))}
+    <div className="flex justify-between items-start pt-2">
+      <div className="flex gap-[28px] overflow-x-auto pb-4">
+        {blocks.map((monthGrid, monthIdx) => (
+          <div key={monthIdx} className="flex flex-col gap-2">
+            <div className="flex gap-[3px]">
+              {monthGrid.map((col, i) => (
+                <div key={i} className="flex flex-col gap-[3px]">
+                  {col.map((intensity, j) => (
+                    <div key={j} className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: getColor(intensity) }} />
+                  ))}
+                </div>
+              ))}
+            </div>
+            <span className="text-[11px] text-gray-500 font-medium text-center">{MONTHS[monthIdx]}</span>
+          </div>
+        ))}
+      </div>
+      
+      {/* Legend */}
+      <div className="flex flex-col gap-[7px] ml-8 pr-4 pt-1">
+        <div className="flex items-center gap-2.5">
+          <div className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: "#1e9e3c" }}></div>
+          <span className="text-[11px] text-gray-600 font-medium whitespace-nowrap">100% Active</span>
         </div>
-      ))}
+        <div className="flex items-center gap-2.5">
+          <div className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: "#3dc25a" }}></div>
+          <span className="text-[11px] text-gray-600 font-medium whitespace-nowrap">75% Active</span>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <div className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: "#7ddb8d" }}></div>
+          <span className="text-[11px] text-gray-600 font-medium whitespace-nowrap">50% Active</span>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <div className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: "#bcefc3" }}></div>
+          <span className="text-[11px] text-gray-600 font-medium whitespace-nowrap">25% Active</span>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <div className="w-[11px] h-[11px] rounded-[2px]" style={{ backgroundColor: "#ffb8b8" }}></div>
+          <span className="text-[11px] text-gray-600 font-medium whitespace-nowrap">0% Active</span>
+        </div>
+      </div>
     </div>
   );
 };
@@ -356,7 +399,7 @@ const StudentProfile = () => {
                 <span className="text-xl font-extrabold text-teal-600">M</span>
               </div>
               <div>
-                <h3 className="text-sm font-bold text-gray-900">About Mentor / Company</h3>
+                <h3 className="text-sm font-bold text-[#1a365d]">About Mentor / Company</h3>
                 <p className="text-xs text-gray-500 mt-1 leading-relaxed">
                   Senior Associate At BCG & MBA from XLRI, Jamshedpur<br/>
                   EX: National Case Competition Exec...
@@ -364,7 +407,7 @@ const StudentProfile = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-gray-900 mb-2">Ongoing Task</h3>
+              <h3 className="text-sm font-bold text-[#1a365d] mb-2">Ongoing Task</h3>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[10px] font-semibold px-2.5 py-1 bg-gray-50 border border-gray-200 rounded-md text-gray-600">#UI/UX</span>
                 <span className="text-[10px] font-semibold px-2.5 py-1 bg-gray-50 border border-gray-200 rounded-md text-gray-600">#Web Dev</span>
@@ -374,22 +417,18 @@ const StudentProfile = () => {
           </div>
 
           {/* Current Status Heatmap */}
-          <div className="mb-10">
-            <h3 className="text-lg font-bold text-black-900 mb-4">Attendance Record</h3>
-            <div className="bg-white p-4 border border-gray-100 rounded-2xl shadow-sm">
-              <Heatmap grid={profile.attendanceGrid} />
-              <div className="flex justify-end items-center gap-4 mt-3 text-[10px] font-medium text-gray-500">
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-green-500"></div>Present</div>
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-red-500"></div>Absent</div>
-              </div>
-            </div>
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-[#1a365d] mb-6">Attendance Record</h3>
+            <Heatmap grid={profile.attendanceGrid} />
           </div>
 
           {/* Kanban Board */}
           <div className="mb-10">
             <div className="flex justify-between items-end mb-6">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Project Details</h3>
+                <h3 className="text-2xl font-bold text-[#1a365d] mb-2 flex items-center gap-2">
+                  Project Details
+                </h3>
                 <p className="text-sm text-gray-500 max-w-2xl">
                   A Full-Stack Web Application Designed To Provide A Seamless, Secure, And Scalable Platform For Managing Users, Data, And Real-Time Interactions Through A Modern And Intuitive Interface.
                 </p>

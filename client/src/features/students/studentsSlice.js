@@ -39,18 +39,29 @@ const generateDummyStudents = () => {
   for (let i = 0; i < 50; i++) {
     let presentCount = 0;
     const attendance = [];
-    for (let w = 0; w < 40; w++) {
+    for (let w = 0; w < 44; w++) {
       const week = [];
       for (let d = 0; d < 7; d++) {
-        const isPresent = Math.random() > 0.15 ? 1 : 0;
-        week.push(isPresent);
-        if (isPresent) presentCount++;
+        // Generate values from 0 to 4
+        // 0: 0% (red), 1: 25%, 2: 50%, 3: 75%, 4: 100%
+        // We'll heavily weight towards 3 and 4 to simulate good attendance
+        const rand = Math.random();
+        let state = 0;
+        if (rand > 0.95) state = 0; // 5% chance of 0% (absent)
+        else if (rand > 0.85) state = 1; // 10% chance of 25%
+        else if (rand > 0.65) state = 2; // 20% chance of 50%
+        else if (rand > 0.35) state = 3; // 30% chance of 75%
+        else state = 4; // 35% chance of 100%
+        
+        week.push(state);
+        // Calculate total attendance percentage as a fraction of max possible (4)
+        presentCount += state;
       }
       attendance.push(week);
     }
     
     const deptObj = DEPARTMENTS[i % DEPARTMENTS.length];
-    const attendancePercentage = Math.round((presentCount / 280) * 100);
+    const attendancePercentage = Math.round((presentCount / 1232) * 100);
 
     students.push({
       id: `student-${i}`,
