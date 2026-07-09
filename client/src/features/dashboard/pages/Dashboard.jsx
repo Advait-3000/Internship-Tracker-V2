@@ -31,25 +31,19 @@ import {
   LayoutGrid,
   Filter,
   Loader2,
+  ChevronDown,
+  GraduationCap
 } from "lucide-react";
 
 // ============================================================
 // STATIC CONFIG (UI-only, never comes from API)
 // ============================================================
 
-const UniversityLogoIcon = ({ className = "w-5 h-5" }) => (
-  <img
-    src="/logo.png"
-    alt="Atharva University"
-    className={`${className} object-contain shrink-0 drop-shadow-sm`}
-  />
-);
-
 const NAV_ITEMS = [
   { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { name: "Students", icon: Users, path: "/students" },
   { name: "Companies", icon: Building2, path: "/companies" },
-  { name: "Faculty", icon: UniversityLogoIcon, path: "/faculty" },
+  { name: "Faculty", icon: GraduationCap, path: "/faculty" },
   { name: "User Profile", icon: UserCircle, path: "/profile" },
 ];
 
@@ -678,8 +672,13 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [viewMode, setViewMode] = useState("table");
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeStatusFilter, setActiveStatusFilter] = useState("Daily");
   const [reportFilter, setReportFilter] = useState("Daily");
   const [statusFilter, setStatusFilter] = useState("Daily");
+  const [selectedDepartment, setSelectedDepartment] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedAttendance, setSelectedAttendance] = useState("All");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const handleSidebarMouseEnter = () => {
     if (!isManual && window.innerWidth >= 1024) {
@@ -729,16 +728,29 @@ const Dashboard = () => {
     navigate("/signin");
   };
 
+  const checkAttendance = (percentage, filterValue) => {
+    if (filterValue === "All") return true;
+    if (filterValue === "Above 90%") return percentage >= 90;
+    if (filterValue === "75% - 90%") return percentage >= 75 && percentage < 90;
+    if (filterValue === "Below 75%") return percentage < 75;
+    return true;
+  };
+
   // ── Filtered students (local search over Redux data) ──
   const filteredStudents = useMemo(
     () =>
       studentsList.filter(
-        (s) =>
-          s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.role.toLowerCase().includes(searchQuery.toLowerCase()),
+        (s) => {
+          const matchSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              s.department.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              s.role.toLowerCase().includes(searchQuery.toLowerCase());
+          const matchDept = selectedDepartment !== "All" ? s.department === selectedDepartment : true;
+          const matchStatus = selectedStatus !== "All" ? s.status === selectedStatus : true;
+          const matchAttendance = checkAttendance(s.attendancePercentage, selectedAttendance);
+          return matchSearch && matchDept && matchStatus && matchAttendance;
+        }
       ),
-    [searchQuery, studentsList],
+    [searchQuery, selectedDepartment, selectedStatus, selectedAttendance, studentsList],
   );
 
   return (
@@ -807,6 +819,8 @@ const Dashboard = () => {
               <input
                 type="text"
                 placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
@@ -825,10 +839,6 @@ const Dashboard = () => {
                 )}
               </button>
             ))}
-            <button className="ml-2 flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-              <Filter className="w-3.5 h-3.5" />
-              Filter
-            </button>
           </div>
         </header>
 
@@ -938,10 +948,81 @@ const Dashboard = () => {
                 <button className="text-sm font-medium text-gray-400 hover:text-indigo-600 transition-colors">
                   Starred
                 </button>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                  <Filter className="w-3.5 h-3.5" />
-                  Filter
-                </button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Filter className="w-3.5 h-3.5" />
+                    Filter
+                  </button>
+                  
+                  {isFilterOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-gray-100 shadow-xl rounded-xl p-4 z-50 flex flex-col gap-4">
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Department</label>
+                        <select
+                          value={selectedDepartment || "All"}
+                          onChange={(e) => setSelectedDepartment(e.target.value === "All" ? "All" : e.target.value)}
+                          className="w-full appearance-none px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        >
+                          <option value="All">All Departments</option>
+                          <option value="B. Tech AIDS">AIDS</option>
+                          <option value="AIML">AIML</option>
+                          <option value="CSE(Cyber)">CSE</option>
+                          <option value="COMPS">COMPS</option>
+                          <option value="IT">IT</option>
+                          <option value="R & A">R & A</option>
+                          <option value="EXTC">EXTC</option>
+                          <option value="Civil">Civil</option>
+                          <option value="ECS">ECS</option>
+                          <option value="ELEC">ELEC</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Status</label>
+                        <select
+                          value={selectedStatus}
+                          onChange={(e) => setSelectedStatus(e.target.value)}
+                          className="w-full appearance-none px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        >
+                          <option value="All">All Status</option>
+                          <option value="Good">Good</option>
+                          <option value="Average">Average</option>
+                          <option value="Bad">Bad</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Attendance</label>
+                        <select
+                          value={selectedAttendance}
+                          onChange={(e) => setSelectedAttendance(e.target.value)}
+                          className="w-full appearance-none px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        >
+                          <option value="All">All Attendance</option>
+                          <option value="Above 90%">Above 90%</option>
+                          <option value="75% - 90%">75% - 90%</option>
+                          <option value="Below 75%">Below 75%</option>
+                        </select>
+                      </div>
+
+                      <div className="pt-2 border-t border-gray-100">
+                        <button
+                          onClick={() => {
+                            setSelectedDepartment("All");
+                            setSelectedStatus("All");
+                            setSelectedAttendance("All");
+                          }}
+                          className="w-full text-center px-3 py-1.5 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                        >
+                          Reset Filters
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
                   <input

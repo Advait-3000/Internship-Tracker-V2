@@ -17,26 +17,22 @@ import {
   ChevronDown,
   MessageSquare,
   Paperclip,
-  MoreHorizontal
+  MoreHorizontal,
+  CheckCircle,
+  Clock,
+  Briefcase,
+  GraduationCap
 } from "lucide-react";
 
 // ============================================================
 // STATIC CONFIG (UI-only, never comes from API)
 // ============================================================
 
-const UniversityLogoIcon = ({ className = "w-5 h-5" }) => (
-  <img
-    src="/logo.png"
-    alt="Atharva University"
-    className={`${className} object-contain shrink-0 drop-shadow-sm`}
-  />
-);
-
 const NAV_ITEMS = [
   { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
   { name: "Students", icon: Users, path: "/students" },
   { name: "Companies", icon: Building2, path: "/companies" },
-  { name: "Faculty", icon: UniversityLogoIcon, path: "/faculty" },
+  { name: "Faculty", icon: GraduationCap, path: "/faculty" },
   { name: "User Profile", icon: UserCircle, path: "/profile" },
 ];
 
@@ -177,28 +173,14 @@ const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/20
 const KANBAN_IMG_1 = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150"><rect width="300" height="150" fill="%23f1f5f9"/><rect x="20" y="20" width="100" height="80" rx="4" fill="%23cbd5e1"/><rect x="140" y="20" width="140" height="15" rx="4" fill="%2394a3b8"/><rect x="140" y="45" width="100" height="10" rx="4" fill="%23cbd5e1"/><rect x="140" y="65" width="120" height="10" rx="4" fill="%23cbd5e1"/></svg>';
 const KANBAN_IMG_2 = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150"><rect width="300" height="150" fill="%23f8fafc"/><circle cx="150" cy="75" r="40" fill="%23e2e8f0"/><circle cx="150" cy="75" r="25" fill="%23cbd5e1"/></svg>';
 
-const Heatmap = () => {
-  // Use a static deterministic grid to prevent hydration/render mismatches
-  const grid = [];
-  for (let w = 0; w < 40; w++) {
-    const col = [];
-    for (let d = 0; d < 7; d++) {
-      let intensity = 0;
-      // Deterministic pseudo-random pattern
-      if ((w * 7 + d) % 3 === 0) intensity = 1;
-      if ((w * 7 + d) % 5 === 0) intensity = 2;
-      if ((w * 7 + d) % 7 === 0) intensity = 3;
-      col.push(intensity);
-    }
-    grid.push(col);
-  }
+const Heatmap = ({ grid }) => {
+  if (!grid || grid.length === 0) return null;
 
   const getColor = (intensity) => {
     switch(intensity) {
-      case 1: return "#bbf7d0"; // green-200
-      case 2: return "#4ade80"; // green-400
-      case 3: return "#16a34a"; // green-600
-      default: return "#f3f4f6"; // gray-100
+      case 1: return "#22c55e"; // Present: Green
+      case 0: return "#ef4444"; // Absent: Red
+      default: return "#f3f4f6";
     }
   };
 
@@ -393,14 +375,12 @@ const StudentProfile = () => {
 
           {/* Current Status Heatmap */}
           <div className="mb-10">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Current Status Of Project</h3>
+            <h3 className="text-lg font-bold text-black-900 mb-4">Attendance Record</h3>
             <div className="bg-white p-4 border border-gray-100 rounded-2xl shadow-sm">
-              <Heatmap />
+              <Heatmap grid={profile.attendanceGrid} />
               <div className="flex justify-end items-center gap-4 mt-3 text-[10px] font-medium text-gray-500">
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-green-600"></div>100% Active</div>
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-green-400"></div>75% Active</div>
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-green-200"></div>50% Active</div>
-                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-gray-100"></div>25% Active</div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-green-500"></div>Present</div>
+                <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-[2px] bg-red-500"></div>Absent</div>
               </div>
             </div>
           </div>
