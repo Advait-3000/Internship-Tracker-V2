@@ -74,8 +74,70 @@ const SignUp = () => {
   return (
     <div className="flex min-h-screen lg:h-screen lg:overflow-hidden bg-[#F3F4F6] p-4 sm:p-6 lg:p-8 items-center justify-center">
       <div className="flex flex-col lg:flex-row w-full max-w-6xl bg-white rounded-[32px] shadow-sm overflow-hidden">
-        {/* Left Form Section */}
-        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-8 lg:p-8">
+        
+        {/* Left Feature Section */}
+        <div className="flex w-full lg:w-1/2 p-4">
+          <div className="w-full h-full rounded-[24px] bg-gradient-to-br from-[#1E112A] via-[#811953] to-[#251A46] relative overflow-hidden flex flex-col justify-center items-center py-12 lg:py-0">
+            
+            {/* Logo at the Top */}
+            <div className="absolute top-8 left-0 w-full flex justify-center z-20">
+              <img src="/logo.png" alt="Atharva University" className="h-28 object-contain" />
+            </div>
+
+            {/* Abstract Shapes */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-50 pointer-events-none">
+              <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[80%] bg-gradient-to-br from-[#FF2E93] to-transparent rounded-full blur-[100px]"></div>
+              <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-gradient-to-tr from-[#4129B7] to-transparent rounded-full blur-[100px]"></div>
+            </div>
+
+            <div className="z-10 w-full max-w-lg px-8 sm:pr-32 lg:pr-16 xl:pr-32 text-center relative h-[380px] mt-16 self-start">
+              <h2 className="text-3xl font-bold text-white mb-12 text-left">Our Features</h2>
+              
+              <div className="relative h-[220px]">
+                {testimonials.map((testi, index) => (
+                  <div 
+                    key={index} 
+                    className={`absolute inset-0 transition-all duration-700 ease-in-out transform z-20 ${
+                      index === currentSlide ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
+                    }`}
+                  >
+                    <div className="bg-white rounded-2xl p-6 shadow-xl text-left h-full flex flex-col relative">
+                      <div className="absolute top-4 right-4 text-gray-400 cursor-pointer hover:text-gray-600">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <p className="text-gray-700 text-sm leading-relaxed mb-6">
+                        {testi.text}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Pagination Dots */}
+              <div className="absolute bottom-[-10px] left-0 w-full flex justify-center space-x-2 px-4 z-20">
+                {testimonials.map((_, i) => (
+                  <button 
+                    key={i}
+                    onClick={() => setCurrentSlide(i)}
+                    className={`h-1 rounded-full transition-all duration-500 focus:outline-none ${i === currentSlide ? 'w-8 bg-white' : 'w-4 bg-white/30 hover:bg-white/50'}`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Person Image Bottom Right */}
+            <div className="absolute bottom-0 right-0 w-[60%] sm:w-[50%] md:w-[45%] lg:w-[55%] xl:w-[50%] z-30 pointer-events-none">
+              <img src="/image.png" alt="Person" className="w-full h-auto object-contain object-bottom transform translate-x-[5%] translate-y-[2%]" />
+            </div>
+            
+          </div>
+        </div>
+
+        {/* Right Form Section */}
+        <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-8 lg:p-8 relative z-40">
           <div className="w-full max-w-md my-auto">
             <h1 className="text-3xl font-semibold text-center text-gray-900 mb-2">Sign Up to Account</h1>
             <p className="text-center text-blue-600 font-medium mb-6 text-sm">Start your 14-day free trial.</p>
@@ -99,7 +161,7 @@ const SignUp = () => {
                     required
                     value={formData.username}
                     onChange={handleChange}
-                    placeholder="Username"
+                    placeholder="John Doe"
                     className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-black focus:border-black sm:text-sm bg-gray-50/50"
                   />
                 </div>
@@ -117,7 +179,7 @@ const SignUp = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="Email"
+                    placeholder="example@gmail.com"
                     className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-black focus:border-black sm:text-sm bg-gray-50/50"
                   />
                 </div>
@@ -215,62 +277,6 @@ const SignUp = () => {
                 Sign In
               </Link>
             </p>
-          </div>
-        </div>
-
-        {/* Right Feature Section */}
-        <div className="flex w-full lg:w-1/2 p-4 mt-8 lg:mt-0">
-          <div className="w-full h-full rounded-[24px] bg-gradient-to-br from-[#1E112A] via-[#811953] to-[#251A46] relative overflow-hidden flex flex-col justify-center items-center py-12 lg:py-0">
-            
-            {/* Abstract Shapes */}
-            <div className="absolute top-0 left-0 w-full h-full opacity-50 pointer-events-none">
-              <div className="absolute top-[-10%] right-[-10%] w-[80%] h-[80%] bg-gradient-to-br from-[#FF2E93] to-transparent rounded-full blur-[100px]"></div>
-              <div className="absolute bottom-[-10%] left-[-10%] w-[60%] h-[60%] bg-gradient-to-tr from-[#4129B7] to-transparent rounded-full blur-[100px]"></div>
-            </div>
-
-            <div className="z-10 w-full max-w-md px-8 text-center">
-              <h2 className="text-3xl font-bold text-white mb-12 text-left">New Features</h2>
-              
-              <div className="relative h-[220px]">
-                {testimonials.map((testi, index) => (
-                  <div 
-                    key={index} 
-                    className={`absolute inset-0 transition-all duration-700 ease-in-out transform ${
-                      index === currentSlide ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
-                    }`}
-                  >
-                    <div className="bg-white rounded-2xl p-6 shadow-xl text-left h-full flex flex-col justify-between relative">
-                      <div className="absolute top-4 right-4 text-gray-400 cursor-pointer hover:text-gray-600">
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 1L13 13M1 13L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </div>
-                      <p className="text-gray-700 text-sm leading-relaxed mb-6">
-                        {testi.text}
-                      </p>
-                      <div className="flex items-center">
-                        <img src={testi.avatar} alt={testi.name} className="w-10 h-10 rounded-full mr-3 border border-gray-100" />
-                        <div>
-                          <h4 className="text-sm font-semibold text-gray-900">{testi.name}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              {/* Pagination Dots */}
-              <div className="flex justify-center mt-12 space-x-2">
-                {testimonials.map((_, i) => (
-                  <button 
-                    key={i}
-                    onClick={() => setCurrentSlide(i)}
-                    className={`h-1 rounded-full transition-all duration-500 focus:outline-none ${i === currentSlide ? 'w-8 bg-white' : 'w-4 bg-white/30 hover:bg-white/50'}`}
-                    aria-label={`Go to slide ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
