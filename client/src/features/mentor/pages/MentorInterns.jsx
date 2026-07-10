@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../auth/authSlice";
 import { fetchStudents } from "../../students/studentsSlice";
 import MentorSidebar from "../components/MentorSidebar";
+import MentorReviewForm from "../components/MentorReviewForm";
 import {
   Menu,
   ChevronDown,
@@ -144,31 +145,8 @@ const MentorInterns = () => {
                          <div className="flex flex-col md:flex-row gap-6 mt-2">
                             
                             {/* Feedback UI */}
-                            <div className="flex-1 space-y-5">
-                              <div>
-                                 <label className="flex items-center justify-between text-sm font-semibold text-gray-900 mb-2">
-                                   <span>Overall Rating</span>
-                                   <span className="text-xs text-gray-500 font-normal">Select stars</span>
-                                 </label>
-                                 <div className="flex gap-1.5 p-3 bg-white rounded-xl border border-gray-100 shadow-sm inline-flex">
-                                    {[1,2,3,4,5].map(star => (
-                                      <button key={star} className="text-gray-200 hover:text-amber-400 focus:text-amber-400 transition-colors cursor-pointer">
-                                        <Star className="w-7 h-7 fill-current" />
-                                      </button>
-                                    ))}
-                                 </div>
-                              </div>
-                              <div>
-                                 <label className="block text-sm font-semibold text-gray-900 mb-2">Performance Review</label>
-                                 <textarea 
-                                   className="w-full border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all shadow-sm resize-none"
-                                   rows="3"
-                                   placeholder={`Describe ${student.name}'s performance this week...`}
-                                 ></textarea>
-                              </div>
-                              <button className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-200 transition-all active:scale-95 w-full sm:w-auto">
-                                 Submit Evaluation
-                              </button>
+                            <div className="flex-1">
+                               <MentorReviewForm studentName={student.name} />
                             </div>
 
                             {/* Profile Link */}

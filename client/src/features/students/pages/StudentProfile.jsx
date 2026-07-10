@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { logout } from "../../auth/authSlice";
 import { fetchStudentProfiles } from "../studentsSlice";
+import MentorReviewForm from "../../mentor/components/MentorReviewForm";
 import {
   LayoutDashboard,
   Users,
@@ -525,6 +526,12 @@ const StudentProfile = () => {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Mentor Review Section */}
+          <div className="mt-8 border border-gray-100 rounded-3xl p-6 md:p-8 bg-white shadow-sm">
+            <h3 className="text-lg font-bold text-gray-900 mb-6">Leave Feedback</h3>
+            <MentorReviewForm studentName={profile.name} />
           </div>
           
         </main>
