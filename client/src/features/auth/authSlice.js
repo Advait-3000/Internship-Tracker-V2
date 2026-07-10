@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const DUMMY_USERS = [
-  { email: 'advait@gmail.com', password: 'pass@123', name: 'Advait' },
-  { email: 'yashwant@gmail.com', password: 'pass@123', name: 'Yashwant' },
-  { email: 'sharvari@gmail.com', password: 'pass@123', name: 'Sharvari' },
-  { email: 'dk@gmail.com', password: 'pass@123', name: 'DK' },
+  { email: 'advait@gmail.com', password: 'pass@123', name: 'Advait', role: 'admin' },
+  { email: 'yashwant@gmail.com', password: 'pass@123', name: 'Yashwant', role: 'admin' },
+  { email: 'sharvari@gmail.com', password: 'pass@123', name: 'Sharvari', role: 'admin' },
+  { email: 'dk@gmail.com', password: 'pass@123', name: 'DK', role: 'admin' },
+  { email: 'mentor@gmail.com', password: 'pass@123', name: 'Mentor', role: 'mentor' },
 ];
 
 export const loginUser = createAsyncThunk(

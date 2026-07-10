@@ -67,7 +67,11 @@ const SignUp = () => {
     e.preventDefault();
     const resultAction = await dispatch(loginUser({ email: formData.email, password: formData.password }));
     if (loginUser.fulfilled.match(resultAction)) {
-      navigate('/dashboard');
+      if (resultAction.payload.role === 'mentor') {
+        navigate('/mentor/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
     }
   };
 
