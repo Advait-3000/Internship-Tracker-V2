@@ -1,7 +1,51 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // ============================================================
-// DUMMY DATA
+// DUMMY STUDENT GENERATOR (assigned to faculty)
+// ============================================================
+
+const STUDENT_NAMES = [
+  "Advait Warang", "Yashwant Singh", "Parth Bhalala", "Sharvari Patil", "Dnyaneshwar K.",
+  "Aarav Mehta", "Vivaan Shah", "Aditya Deshmukh", "Vihaan Reddy", "Arjun Nair",
+  "Sai Kulkarni", "Ayaan Patel", "Krishna Iyer", "Ishaan Gupta", "Shaurya Rao",
+  "Aaradhya Joshi", "Ananya Pillai", "Diya Sharma", "Riya Verma", "Myra Kapoor",
+  "Kiara Singh", "Kriti Bhat", "Pari Menon", "Sia Das", "Zara Khan",
+  "Rohan Mishra", "Rahul Tiwari", "Karan Malhotra", "Siddharth Ghosh", "Vikram Saxena",
+];
+
+const PROJECTS = [
+  "AI-Powered Chatbot @ TCS",
+  "Cloud Migration @ Infosys",
+  "Data Analytics @ Deloitte",
+  "Mobile App Dev @ Wipro",
+  "Cybersecurity Audit @ KPMG",
+  "ML Pipeline @ Amazon",
+  "Full-Stack Web App @ Accenture",
+  "DevOps Automation @ Capgemini",
+  "IoT Dashboard @ Siemens",
+  "Blockchain PoC @ IBM",
+  "NLP Research @ Microsoft",
+  "Computer Vision @ Nvidia",
+];
+
+const STUDENT_STATUSES = ["On Track", "Needs Review", "Completed", "At Risk"];
+
+const generateStudents = (count, seed) => {
+  const students = [];
+  for (let i = 0; i < count; i++) {
+    const idx = (seed + i) % STUDENT_NAMES.length;
+    students.push({
+      id: `stu-${seed}-${i}`,
+      name: STUDENT_NAMES[idx],
+      project: PROJECTS[(seed + i) % PROJECTS.length],
+      status: STUDENT_STATUSES[(seed + i) % STUDENT_STATUSES.length],
+    });
+  }
+  return students;
+};
+
+// ============================================================
+// DUMMY FACULTY DATA
 // ============================================================
 
 const DUMMY_FACULTY = [
@@ -10,7 +54,8 @@ const DUMMY_FACULTY = [
     name: "Prof. Omkar",
     email: "omkar@aum.edu.in",
     department: "Computer Engineering",
-    assignedStudentsCount: 42,
+    studentQuota: 50,
+    assignedStudents: generateStudents(42, 1),
     status: "Active",
   },
   {
@@ -18,7 +63,8 @@ const DUMMY_FACULTY = [
     name: "Prof. Meera Kulkarni",
     email: "meera.kulkarni@aum.edu.in",
     department: "Information Technology",
-    assignedStudentsCount: 38,
+    studentQuota: 45,
+    assignedStudents: generateStudents(38, 5),
     status: "Active",
   },
   {
@@ -26,7 +72,8 @@ const DUMMY_FACULTY = [
     name: "Dr. Rajesh Patil",
     email: "rajesh.patil@aum.edu.in",
     department: "EXTC",
-    assignedStudentsCount: 35,
+    studentQuota: 40,
+    assignedStudents: generateStudents(35, 10),
     status: "Active",
   },
   {
@@ -34,7 +81,8 @@ const DUMMY_FACULTY = [
     name: "Prof. Anita Sharma",
     email: "anita.sharma@aum.edu.in",
     department: "Computer Engineering",
-    assignedStudentsCount: 28,
+    studentQuota: 40,
+    assignedStudents: generateStudents(28, 15),
     status: "Active",
   },
   {
@@ -42,7 +90,8 @@ const DUMMY_FACULTY = [
     name: "Dr. Vikram Joshi",
     email: "vikram.joshi@aum.edu.in",
     department: "AIML",
-    assignedStudentsCount: 45,
+    studentQuota: 50,
+    assignedStudents: generateStudents(45, 20),
     status: "Active",
   },
   {
@@ -50,7 +99,8 @@ const DUMMY_FACULTY = [
     name: "Prof. Kavita Desai",
     email: "kavita.desai@aum.edu.in",
     department: "Information Technology",
-    assignedStudentsCount: 30,
+    studentQuota: 40,
+    assignedStudents: generateStudents(30, 3),
     status: "Inactive",
   },
   {
@@ -58,7 +108,8 @@ const DUMMY_FACULTY = [
     name: "Dr. Amit Naik",
     email: "amit.naik@aum.edu.in",
     department: "AIDS",
-    assignedStudentsCount: 22,
+    studentQuota: 30,
+    assignedStudents: generateStudents(22, 7),
     status: "Active",
   },
   {
@@ -66,7 +117,8 @@ const DUMMY_FACULTY = [
     name: "Prof. Sneha Ghosh",
     email: "sneha.ghosh@aum.edu.in",
     department: "EXTC",
-    assignedStudentsCount: 18,
+    studentQuota: 25,
+    assignedStudents: generateStudents(18, 12),
     status: "Inactive",
   },
   {
@@ -74,7 +126,8 @@ const DUMMY_FACULTY = [
     name: "Dr. Pradeep Verma",
     email: "pradeep.verma@aum.edu.in",
     department: "Civil",
-    assignedStudentsCount: 15,
+    studentQuota: 30,
+    assignedStudents: generateStudents(15, 17),
     status: "Active",
   },
   {
@@ -82,7 +135,8 @@ const DUMMY_FACULTY = [
     name: "Prof. Lakshmi Iyer",
     email: "lakshmi.iyer@aum.edu.in",
     department: "ECS",
-    assignedStudentsCount: 20,
+    studentQuota: 30,
+    assignedStudents: generateStudents(20, 22),
     status: "Active",
   },
   {
@@ -90,7 +144,8 @@ const DUMMY_FACULTY = [
     name: "Dr. Sanjay Mane",
     email: "sanjay.mane@aum.edu.in",
     department: "Computer Engineering",
-    assignedStudentsCount: 33,
+    studentQuota: 45,
+    assignedStudents: generateStudents(33, 25),
     status: "Active",
   },
   {
@@ -98,7 +153,8 @@ const DUMMY_FACULTY = [
     name: "Prof. Ritu Agarwal",
     email: "ritu.agarwal@aum.edu.in",
     department: "AIML",
-    assignedStudentsCount: 40,
+    studentQuota: 50,
+    assignedStudents: generateStudents(40, 28),
     status: "Active",
   },
 ];
@@ -118,6 +174,13 @@ const facultySlice = createSlice({
     addFaculty: (state, action) => {
       state.list.unshift(action.payload);
     },
+    updateFaculty: (state, action) => {
+      const idx = state.list.findIndex((f) => f.id === action.payload.id);
+      if (idx !== -1) {
+        // Merge updated fields while preserving assignedStudents
+        state.list[idx] = { ...state.list[idx], ...action.payload };
+      }
+    },
     deleteFaculty: (state, action) => {
       state.list = state.list.filter((f) => f.id !== action.payload);
     },
@@ -127,6 +190,6 @@ const facultySlice = createSlice({
   },
 });
 
-export const { addFaculty, deleteFaculty, clearFacultyError } =
+export const { addFaculty, updateFaculty, deleteFaculty, clearFacultyError } =
   facultySlice.actions;
 export default facultySlice.reducer;
