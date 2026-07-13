@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -13,17 +13,17 @@ import {
   SlidersHorizontal,
   LayoutGrid,
   Star,
-} from 'lucide-react';
+} from "lucide-react";
 
 /* ──────────────────────────────────────────────
    Navigation link data
    ────────────────────────────────────────────── */
 const navItems = [
-  { to: '/',          label: 'Dashboard',    icon: LayoutDashboard },
-  { to: '/students',  label: 'Students',     icon: Users },
-  { to: '/companies', label: 'Companies',    icon: Briefcase },
-  { to: '/faculty',   label: 'Faculty',      icon: GraduationCap },
-  { to: '/profile',   label: 'User Profile', icon: UserCircle },
+  { to: "/", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/students", label: "Students", icon: Users },
+  { to: "/companies", label: "Companies", icon: Briefcase },
+  { to: "/faculty", label: "Faculty", icon: GraduationCap },
+  { to: "/profile", label: "User Profile", icon: UserCircle },
 ];
 
 /* ──────────────────────────────────────────────
@@ -38,11 +38,13 @@ function DashboardLayout() {
         className="fixed inset-y-0 left-0 z-40 w-52 flex flex-col border-r border-gray-200 bg-white px-3 py-5"
       >
         {/* Logo */}
-        <div className="flex items-center gap-2.5 px-2 pb-6">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-amber-600 bg-amber-50">
-            <span className="text-sm font-bold text-amber-700">A</span>
-          </div>
-          <span className="text-lg font-extrabold tracking-wide text-gray-900">
+        <div className="flex items-center gap-6 px-2 pb-6">
+          <img
+            src="/logo.png"
+            alt="AUM Logo"
+            className="h-12 w-auto object-contain"
+          />
+          <span className="text-xl font-extrabold tracking-wide text-black">
             AUM
           </span>
         </div>
@@ -53,12 +55,12 @@ function DashboardLayout() {
             <NavLink
               key={to}
               to={to}
-              end={to === '/'}
+              end={to === "/"}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors duration-150 ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    ? "bg-blue-50 text-blue-600"
+                    : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                 }`
               }
             >
