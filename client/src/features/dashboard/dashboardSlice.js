@@ -154,6 +154,9 @@ const initialState = {
     extc: 0,
   },
 
+  // Student reports view toggle ('grid' | 'table')
+  viewType: 'grid',
+
   // Loading & error tracking
   loading: false,
   chartsLoading: false,
@@ -170,6 +173,9 @@ const dashboardSlice = createSlice({
   reducers: {
     clearDashboardError: (state) => {
       state.error = null;
+    },
+    setViewType: (state, action) => {
+      state.viewType = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -206,5 +212,5 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { clearDashboardError } = dashboardSlice.actions;
+export const { clearDashboardError, setViewType } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
