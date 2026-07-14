@@ -4,6 +4,7 @@ import dashboardReducer from '../features/dashboard/dashboardSlice';
 import studentsReducer from '../features/students/studentsSlice';
 import facultyReducer from '../features/faculty/facultySlice';
 import internReducer from '../features/students/studentSlice';
+import mentorReducer from '../features/mentor/mentorSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     students: studentsReducer,
     faculty: facultyReducer,
     interns: internReducer,
+    mentor: mentorReducer,
   },
 });

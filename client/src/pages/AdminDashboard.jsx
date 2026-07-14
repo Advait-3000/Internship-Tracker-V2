@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toSlug } from './StudentProfile';
 import {
   fetchDashboardStats,
   fetchChartData,
@@ -296,6 +298,7 @@ const InternshipStatusChart = ({ statusData, activeFilter, setActiveFilter }) =>
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Redux state
   const {
@@ -507,7 +510,11 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {filteredStudents.map((s) => (
-                    <tr key={s.id} className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors">
+                    <tr 
+                      key={s.id} 
+                      onClick={() => navigate('/students/' + toSlug(s.name))}
+                      className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer"
+                    >
                       <td className="py-3.5 px-3 text-gray-500">{s.id}</td>
                       <td className="py-3.5 px-3 text-gray-900 font-medium">{s.name}</td>
                       <td className="py-3.5 px-3 text-gray-500">{s.role}</td>
@@ -552,7 +559,8 @@ const AdminDashboard = () => {
                   .map((card, i) => (
                     <div
                       key={i}
-                      className="flex gap-4 p-4 rounded-2xl border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all duration-200"
+                      onClick={() => navigate('/students/' + toSlug(card.name))}
+                      className="flex gap-4 p-4 rounded-2xl border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all duration-200 cursor-pointer"
                     >
                       <img
                         src={card.avatar || DEFAULT_AVATAR}

@@ -1,29 +1,38 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+// ============================================================
+// DUMMY USERS (for email/password login)
+// ============================================================
 
 const DUMMY_USERS = [
-  { email: 'advait@gmail.com', password: 'pass@123', name: 'Advait', role: 'admin' },
-  { email: 'yashwant@gmail.com', password: 'pass@123', name: 'Yashwant', role: 'admin' },
-  { email: 'sharvari@gmail.com', password: 'pass@123', name: 'Sharvari', role: 'admin' },
-  { email: 'dk@gmail.com', password: 'pass@123', name: 'DK', role: 'admin' },
-  { email: 'mentor@gmail.com', password: 'pass@123', name: 'Mentor', role: 'mentor' },
+  { email: "advait@gmail.com", password: "pass@123", name: "Advait Warang", role: "Admin" },
+  { email: "yashwant@gmail.com", password: "pass@123", name: "Yashwant Singh", role: "Admin" },
+  { email: "mentor@gmail.com", password: "pass@123", name: "Rahul Mentor", role: "Mentor" },
+  { email: "student@gmail.com", password: "pass@123", name: "Parth Bhalala", role: "Student" },
 ];
 
+// ============================================================
+// ASYNC THUNK — email/password login
+// ============================================================
+
 export const loginUser = createAsyncThunk(
-  'auth/loginUser',
+  "auth/loginUser",
   async ({ email, password }, { rejectWithValue }) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    const user = DUMMY_USERS.find(u => u.email === email && u.password === password);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    const user = DUMMY_USERS.find(
+      (u) => u.email === email && u.password === password
+    );
     if (user) {
-      // Don't store password in state
-      const { password, ...userData } = user;
+      const { password: _, ...userData } = user;
       return userData;
     }
-    
-    return rejectWithValue('Invalid email or password');
+    return rejectWithValue("Invalid email or password");
   }
 );
+
+// ============================================================
+// SLICE
+// ============================================================
 
 const initialState = {
   user: null,
@@ -33,32 +42,30 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    /* Keep these for later when backend is connected
-    signInStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    signInSuccess: (state, action) => {
-      state.user = action.payload;
+    // Instant bypass login — sets role directly (for dev/testing)
+    login: (state, action) => {
+      const { role } = action.payload;
+      state.user = {
+        name: `Demo ${role}`,
+        email: `demo-${role.toLowerCase()}@aum.edu.in`,
+        role,
+      };
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
     },
-    signInFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    */
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      state.loading = false;
+      state.error = null;
     },
     clearError: (state) => {
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -76,10 +83,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
-  }
+  },
 });
 
-// export const { signInStart, signInSuccess, signInFailure, logout } = authSlice.actions;
-export const { logout, clearError } = authSlice.actions;
-
+export const { login, logout, clearError } = authSlice.actions;
 export default authSlice.reducer;

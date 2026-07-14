@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { toSlug } from './StudentProfile';
 import {
   ArrowLeft,
   Mail,
@@ -130,7 +131,7 @@ const FacultyDetails = () => {
                 {faculty.assignedStudents.map((student) => (
                   <tr
                     key={student.id}
-                    onClick={() => navigate(`/student/${student.id}`)}
+                    onClick={() => navigate(`/students/${toSlug(student.name)}`)}
                     className="hover:bg-gray-50/60 transition-colors cursor-pointer"
                   >
                     <td className="py-3.5 px-5 text-gray-400 font-mono text-xs">
