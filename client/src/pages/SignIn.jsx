@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Mail, Lock, EyeOff, Eye, ShieldCheck, UserCheck, GraduationCap } from 'lucide-react';
@@ -9,35 +9,11 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false
   });
-
-  const dashboardSlides = [
-    [
-      { title: "Total Tasks", val: "425", change: "+2.45%", isUp: true, type: "bars" },
-      { title: "Completed Tasks", val: "87", change: "+21%", isUp: true, type: "wave" },
-      { title: "Incomplete Tasks", val: "72,550", change: "-21.33%", isUp: false, subtext: "64%", type: "gauge" },
-      { title: "Done Tasks", val: "72,550", change: "-21.33%", isUp: false, type: "stat" }
-    ],
-    [
-      { title: "Active Interns", val: "1,450", change: "+15.2%", isUp: true, type: "bars" },
-      { title: "Faculty Reviews", val: "380", change: "+8.1%", isUp: true, type: "wave" },
-      { title: "Attendance Rate", val: "94.5%", change: "+3.3%", isUp: true, subtext: "95%", type: "gauge" },
-      { title: "Certificates", val: "1,120", change: "+12.4%", isUp: true, type: "stat" }
-    ]
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % dashboardSlides.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [dashboardSlides.length]);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -263,73 +239,15 @@ const SignIn = () => {
               <img src="/logo.png" alt="Atharva University Mumbai" className="h-24 sm:h-28 object-contain" />
             </div>
 
-            {/* Dashboard Feature Slider */}
-            <div className="z-20 w-full max-w-md mx-auto my-auto pt-4 relative">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white text-left mb-6">New Features</h2>
-              
-              <div className="relative w-full h-[250px]">
-                {dashboardSlides.map((slide, slideIdx) => (
-                  <div
-                    key={slideIdx}
-                    className={`absolute inset-0 grid grid-cols-2 gap-4 transition-all duration-700 ease-in-out transform ${
-                      slideIdx === currentSlide ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-8 pointer-events-none'
-                    }`}
-                  >
-                    {slide.map((card, idx) => (
-                      <div key={idx} className="bg-white rounded-2xl p-4 shadow-xl flex flex-col justify-between h-[110px] z-20">
-                        <div className="flex justify-between items-start">
-                          <p className="text-gray-500 text-xs font-semibold">{card.title}</p>
-                          <span className="text-gray-400">•••</span>
-                        </div>
-                        <div className="flex justify-between items-end">
-                          <div>
-                            <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">{card.val}</h3>
-                            <p className={`text-[10px] font-bold mt-0.5 ${card.isUp ? 'text-green-600' : 'text-red-500'}`}>
-                              {card.change}
-                            </p>
-                          </div>
-
-                          {card.type === "bars" && (
-                            <div className="flex items-end space-x-1 h-8">
-                              <div className="w-1.5 bg-blue-300 rounded-t-xs h-3"></div>
-                              <div className="w-1.5 bg-blue-500 rounded-t-xs h-6"></div>
-                              <div className="w-1.5 bg-blue-400 rounded-t-xs h-4"></div>
-                              <div className="w-1.5 bg-blue-600 rounded-t-xs h-8"></div>
-                            </div>
-                          )}
-
-                          {card.type === "wave" && (
-                            <div className="w-14 h-8 flex items-center">
-                              <svg viewBox="0 0 100 30" className="w-full h-full stroke-purple-600 fill-none" strokeWidth="3">
-                                <path d="M0 20 Q 15 5, 30 15 T 60 10 T 80 20 T 100 8" />
-                              </svg>
-                            </div>
-                          )}
-
-                          {card.type === "gauge" && (
-                            <div className="w-9 h-9 rounded-full border-2 border-blue-500 flex items-center justify-center">
-                              <span className="text-[10px] font-bold text-blue-600">{card.subtext}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-
-              {/* Slider Dots */}
-              <div className="flex justify-start gap-2 mt-2">
-                {dashboardSlides.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      currentSlide === idx ? 'w-8 bg-white' : 'w-2.5 bg-white/40 hover:bg-white/60'
-                    }`}
-                    aria-label={`Slide ${idx + 1}`}
-                  />
-                ))}
+            {/* Quote Section */}
+            <div className="z-20 w-full max-w-lg mx-auto my-auto relative px-2 sm:px-6 transform -translate-y-12 sm:-translate-y-20">
+              <div className="flex flex-col">
+                <h1 className="text-5xl sm:text-6xl md:text-[5.5rem] font-serif font-extrabold text-white leading-[1.05] tracking-tight drop-shadow-md">
+                  Be the Change.
+                </h1>
+                <h1 className="text-5xl sm:text-6xl md:text-[5.5rem] font-serif font-extrabold text-[#FBBF24] leading-[1.05] tracking-tight drop-shadow-md mt-2">
+                  Lead the Future.
+                </h1>
               </div>
             </div>
 
