@@ -5,6 +5,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // ============================================================
 
 const DUMMY_USERS = [
+  { email: "sadmin@gmail.com", password: "sadmin@123", name: "Super Administrator", role: "SuperAdmin" },
   { email: "advait@gmail.com", password: "pass@123", name: "Advait Warang", role: "Admin" },
   { email: "yashwant@gmail.com", password: "pass@123", name: "Yashwant Singh", role: "Admin" },
   { email: "mentor@gmail.com", password: "pass@123", name: "Rahul Mentor", role: "Mentor" },

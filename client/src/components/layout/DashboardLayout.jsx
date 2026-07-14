@@ -36,24 +36,33 @@ function DashboardLayout() {
     dispatch(logout());
   };
 
-  const isMentor = user?.role === "Mentor";
+  const isMentor = user?.role === 'Mentor';
+  const isSuperAdmin = user?.role === 'SuperAdmin';
 
   // Dynamic navigation items based on role
   const navItems = isMentor
     ? [
-        { to: "/mentor", label: "Mentor Portal", icon: Award, end: true },
-        { to: "/mentor?tab=interns", label: "Interns List", icon: Users },
-        { to: "/mentor?tab=projects", label: "Project Lists", icon: FolderKanban },
-        { to: "/mentor?tab=reviews", label: "Reviews Log", icon: MessageSquarePlus },
-        { to: "/students", label: "Student Directory", icon: GraduationCap },
-        { to: "/profile", label: "User Profile", icon: UserCircle },
+        { to: '/mentor', label: 'Mentor Portal', icon: Award, end: true },
+        { to: '/mentor?tab=interns', label: 'Interns List', icon: Users },
+        { to: '/mentor?tab=projects', label: 'Project Lists', icon: FolderKanban },
+        { to: '/mentor?tab=reviews', label: 'Reviews Log', icon: MessageSquarePlus },
+        { to: '/students', label: 'Student Directory', icon: GraduationCap },
+        { to: '/profile', label: 'User Profile', icon: UserCircle },
+      ]
+    : isSuperAdmin
+    ? [
+        { to: '/super-admin', label: 'S-Admin Dashboard', icon: LayoutDashboard, end: true },
+        { to: '/students', label: 'Students', icon: Users },
+        { to: '/companies', label: 'Companies', icon: Briefcase },
+        { to: '/admin-management', label: 'Admin Management', icon: SlidersHorizontal },
+        { to: '/profile', label: 'User Profile', icon: UserCircle },
       ]
     : [
-        { to: "/", label: "Dashboard", icon: LayoutDashboard, end: true },
-        { to: "/students", label: "Students", icon: Users },
-        { to: "/companies", label: "Companies", icon: Briefcase },
-        { to: "/faculty", label: "Faculty", icon: GraduationCap },
-        { to: "/profile", label: "User Profile", icon: UserCircle },
+        { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+        { to: '/students', label: 'Students', icon: Users },
+        { to: '/companies', label: 'Companies', icon: Briefcase },
+        { to: '/faculty', label: 'Faculty', icon: GraduationCap },
+        { to: '/profile', label: 'User Profile', icon: UserCircle },
       ];
 
   return (

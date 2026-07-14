@@ -5,6 +5,7 @@ import studentsReducer from '../features/students/studentsSlice';
 import facultyReducer from '../features/faculty/facultySlice';
 import internReducer from '../features/students/studentSlice';
 import mentorReducer from '../features/mentor/mentorSlice';
+import adminReducer from '../features/admins/adminSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,7 @@ export const store = configureStore({
     faculty: facultyReducer,
     interns: internReducer,
     mentor: mentorReducer,
+    admins: adminReducer,
   },
 });
+

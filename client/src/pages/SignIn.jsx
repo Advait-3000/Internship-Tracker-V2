@@ -27,15 +27,13 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // If email/password are provided, authenticate via loginUser thunk or instant login
     if (formData.email || formData.password) {
       const resultAction = await dispatch(loginUser({ email: formData.email, password: formData.password }));
       if (loginUser.fulfilled.match(resultAction)) {
-        if (resultAction.payload.role === 'Mentor') {
-          navigate('/mentor');
-        } else {
-          navigate('/');
-        }
+        const { role } = resultAction.payload;
+        if (role === 'Mentor') navigate('/mentor');
+        else if (role === 'SuperAdmin') navigate('/super-admin');
+        else navigate('/');
         return;
       }
     }
@@ -46,11 +44,9 @@ const SignIn = () => {
 
   const handleDummyLogin = (role) => {
     dispatch(login({ role }));
-    if (role === 'Mentor') {
-      navigate('/mentor');
-    } else {
-      navigate('/');
-    }
+    if (role === 'Mentor') navigate('/mentor');
+    else if (role === 'SuperAdmin') navigate('/super-admin');
+    else navigate('/');
   };
 
   return (
