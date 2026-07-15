@@ -32,6 +32,14 @@ function DashboardLayout() {
     return <Navigate to="/login" replace />;
   }
 
+  // ENFORCE ROLE SEPARATION: Redirect Student and Company to their specific layouts
+  if (user?.role === 'Student') {
+    return <Navigate to="/student/dashboard" replace />;
+  }
+  if (user?.role === 'Company') {
+    return <Navigate to="/company/dashboard" replace />;
+  }
+
   const handleLogout = () => {
     dispatch(logout());
   };

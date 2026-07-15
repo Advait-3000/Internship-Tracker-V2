@@ -6,6 +6,8 @@ import facultyReducer from '../features/faculty/facultySlice';
 import internReducer from '../features/students/studentSlice';
 import mentorReducer from '../features/mentor/mentorSlice';
 import adminReducer from '../features/admins/adminSlice';
+import studentPortalReducer from '../features/students/studentPortalSlice';
+import companyReducer from '../features/companies/companySlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
     interns: internReducer,
     mentor: mentorReducer,
     admins: adminReducer,
+    studentPortal: studentPortalReducer,
+    companies: companyReducer,
   },
 });
 
