@@ -27,19 +27,21 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.email || formData.password) {
-      const resultAction = await dispatch(loginUser({ email: formData.email, password: formData.password }));
-      if (loginUser.fulfilled.match(resultAction)) {
-        const { role } = resultAction.payload;
-        if (role === 'Mentor') navigate('/mentor');
-        else if (role === 'SuperAdmin') navigate('/super-admin');
-        else navigate('/');
-        return;
-      }
+    
+    if (!formData.email || !formData.password) {
+      // Should be handled by required attributes, but adding a failsafe
+      return;
     }
-    // Fallback instant sign in for demo
-    dispatch(login({ role: 'Admin' }));
-    navigate('/');
+
+    const resultAction = await dispatch(loginUser({ email: formData.email, password: formData.password }));
+    
+    if (loginUser.fulfilled.match(resultAction)) {
+      const { role } = resultAction.payload;
+      if (role === 'Mentor') navigate('/mentor');
+      else if (role === 'SuperAdmin') navigate('/super-admin');
+      else if (role === 'Company') navigate('/company/dashboard');
+      else navigate('/');
+    }
   };
 
   const handleDummyLogin = (role) => {
@@ -114,6 +116,7 @@ const SignIn = () => {
                     <Mail className="h-4 w-4" />
                   </div>
                   <input
+                    required
                     type="email"
                     name="email"
                     value={formData.email}
@@ -134,6 +137,7 @@ const SignIn = () => {
                     <Lock className="h-4 w-4" />
                   </div>
                   <input
+                    required
                     type={showPassword ? "text" : "password"}
                     name="password"
                     value={formData.password}
