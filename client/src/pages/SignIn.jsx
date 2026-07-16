@@ -40,6 +40,7 @@ const SignIn = () => {
       if (role === 'Mentor') navigate('/mentor');
       else if (role === 'SuperAdmin') navigate('/super-admin');
       else if (role === 'Company') navigate('/company/dashboard');
+      else if (role === 'Faculty') navigate('/faculty/dashboard');
       else navigate('/');
     }
   };
@@ -48,6 +49,8 @@ const SignIn = () => {
     dispatch(login({ role }));
     if (role === 'Mentor') navigate('/mentor');
     else if (role === 'SuperAdmin') navigate('/super-admin');
+    else if (role === 'Company') navigate('/company/dashboard');
+    else if (role === 'Faculty') navigate('/faculty/dashboard');
     else navigate('/');
   };
 
@@ -93,6 +96,14 @@ const SignIn = () => {
                 >
                   <UserCheck className="w-3.5 h-3.5" />
                   Mentor
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDummyLogin('Faculty')}
+                  className="flex items-center justify-center gap-1.5 rounded-xl bg-white px-3 py-2 text-xs font-bold text-amber-700 shadow-xs border border-gray-200 hover:bg-amber-600 hover:text-white transition-all cursor-pointer"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  Faculty
                 </button>
                 <button
                   type="button"

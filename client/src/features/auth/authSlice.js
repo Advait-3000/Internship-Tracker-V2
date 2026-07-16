@@ -10,6 +10,7 @@ const DUMMY_USERS = [
   { email: "yashwant@gmail.com", password: "pass@123", name: "Yashwant Singh", role: "Admin" },
   { email: "mentor@gmail.com", password: "pass@123", name: "Rahul Mentor", role: "Mentor" },
   { email: "student@gmail.com", password: "pass@123", name: "Parth Bhalala", role: "Student" },
+  { email: "faculty@gmail.com", password: "pass@123", name: "Prof. Omkar", role: "Faculty", facultyId: "fac-1" },
   // Company accounts
   { email: "tcs@company.com", password: "pass@123", name: "TCS Careers", role: "Company", companyId: "comp-1" },
   { email: "google@company.com", password: "pass@123", name: "Google Careers", role: "Company", companyId: "comp-3" },

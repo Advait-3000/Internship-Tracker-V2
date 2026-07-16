@@ -18,10 +18,11 @@ import {
   Paperclip,
   Filter,
   ChevronDown,
-  Plus,
   MoreHorizontal,
   Activity,
+  Plus,
 } from "lucide-react";
+import { uploadInternshipLetter } from "../../features/students/studentPortalSlice";
 
 // ── Heatmap (reused from StudentProfile.jsx) ──
 const Heatmap = ({ grid }) => {
@@ -260,7 +261,12 @@ const StudentProfilePage = () => {
   const { user } = useSelector((s) => s.auth);
 
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [certificateUploaded, setCertificateUploaded] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleUploadLetter = () => {
+    // Simulate an upload process
+    dispatch(uploadInternshipLetter("https://example.com/uploaded-internship-letter.pdf"));
+  };
 
   const myReviews = reviews.filter((r) => r.internName === user?.name);
   const avgRating =
@@ -328,23 +334,42 @@ const StudentProfilePage = () => {
           </div>
         </div>
 
-        {/* 2. Completion Certificate Upload (student only) */}
+        {/* 2. Internship Letter Upload (student only) */}
         <div className="bg-gray-50/80 rounded-2xl border border-gray-200/80 p-5">
           <h2 className="text-sm font-bold text-gray-900 mb-3">
-            Completion Certificate Proof <span className="text-xs font-normal text-gray-400">(Student only)</span>
+            Internship Letter <span className="text-xs font-normal text-gray-400">(Upload for Faculty Approval)</span>
           </h2>
-          {certificateUploaded ? (
+          {profile.internshipLetter?.status === "Approved" ? (
             <div className="flex items-center gap-3 p-3 rounded-xl bg-green-50 border border-green-200 text-green-800 text-sm font-semibold">
-              <FileCheck className="w-5 h-5 text-green-600" />
-              Certificate submitted successfully — pending verification
+              <CheckCircle className="w-5 h-5 text-green-600" />
+              Letter Approved by Faculty
+            </div>
+          ) : profile.internshipLetter?.status === "Rejected" ? (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm font-semibold">
+                <X className="w-5 h-5 text-red-600" />
+                Letter Rejected by Faculty. Please upload a valid document.
+              </div>
+              <button
+                onClick={handleUploadLetter}
+                className="w-full flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 bg-white py-4 text-sm font-medium text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors cursor-pointer"
+              >
+                <Upload className="w-4 h-4" />
+                Re-upload Internship Letter
+              </button>
+            </div>
+          ) : profile.internshipLetter?.status === "Pending" ? (
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-semibold">
+              <FileCheck className="w-5 h-5 text-amber-600" />
+              Letter submitted successfully — pending faculty approval
             </div>
           ) : (
             <button
-              onClick={() => setCertificateUploaded(true)}
+              onClick={handleUploadLetter}
               className="w-full flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 bg-white py-4 text-sm font-medium text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors cursor-pointer"
             >
               <Upload className="w-4 h-4" />
-              Upload Completion Certificate
+              Upload Internship Letter
             </button>
           )}
         </div>

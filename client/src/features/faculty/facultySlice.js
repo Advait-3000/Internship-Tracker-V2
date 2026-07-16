@@ -39,6 +39,10 @@ const generateStudents = (count, seed) => {
       name: STUDENT_NAMES[idx],
       project: PROJECTS[(seed + i) % PROJECTS.length],
       status: STUDENT_STATUSES[(seed + i) % STUDENT_STATUSES.length],
+      internshipLetter: {
+        status: (seed + i) % 3 === 0 ? "Pending" : (seed + i) % 3 === 1 ? "Approved" : "Not Uploaded",
+        url: "https://example.com/dummy-letter.pdf",
+      }
     });
   }
   return students;
@@ -187,9 +191,19 @@ const facultySlice = createSlice({
     clearFacultyError: (state) => {
       state.error = null;
     },
+    updateInternshipLetterStatus: (state, action) => {
+      const { facultyId, studentId, status } = action.payload;
+      const faculty = state.list.find((f) => f.id === facultyId);
+      if (faculty) {
+        const student = faculty.assignedStudents.find((s) => s.id === studentId);
+        if (student) {
+          student.internshipLetter.status = status;
+        }
+      }
+    }
   },
 });
 
-export const { addFaculty, updateFaculty, deleteFaculty, clearFacultyError } =
+export const { addFaculty, updateFaculty, deleteFaculty, clearFacultyError, updateInternshipLetterStatus } =
   facultySlice.actions;
 export default facultySlice.reducer;

@@ -40,6 +40,10 @@ const DEFAULT_PROFILE = {
   department: "Information Technology",
   year: "Third Year",
   college: "Atharva College of Engineering",
+  internshipLetter: {
+    status: "Not Uploaded", // 'Not Uploaded' | 'Pending' | 'Approved' | 'Rejected'
+    url: "",
+  },
 };
 
 // ============================================================
@@ -161,6 +165,17 @@ const studentPortalSlice = createSlice({
       state.profile = { ...state.profile, ...action.payload };
       saveToLS(LS_PROFILE_KEY, state.profile);
     },
+    uploadInternshipLetter: (state, action) => {
+      state.profile.internshipLetter = {
+        status: "Pending",
+        url: action.payload || "https://example.com/dummy-letter.pdf",
+      };
+      saveToLS(LS_PROFILE_KEY, state.profile);
+    },
+    updateInternshipLetterStatus: (state, action) => {
+      state.profile.internshipLetter.status = action.payload;
+      saveToLS(LS_PROFILE_KEY, state.profile);
+    },
     resetProfile: (state) => {
       state.profile = DEFAULT_PROFILE;
       saveToLS(LS_PROFILE_KEY, DEFAULT_PROFILE);
@@ -190,6 +205,8 @@ const studentPortalSlice = createSlice({
 
 export const {
   updateProfile,
+  uploadInternshipLetter,
+  updateInternshipLetterStatus,
   resetProfile,
   updateTaskStatus,
   addTask,

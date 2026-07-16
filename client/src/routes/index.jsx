@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import StudentLayout from '../components/layout/StudentLayout';
 import CompanyLayout from '../components/layout/CompanyLayout';
+import FacultyLayout from '../components/layout/FacultyLayout';
 import AdminDashboard from '../pages/AdminDashboard';
 import FacultyManagement from '../pages/FacultyManagement';
 import FacultyDetails from '../pages/FacultyDetails';
@@ -27,6 +28,13 @@ import CompanyDashboard from '../pages/company/CompanyDashboard';
 import CompanyListings from '../pages/company/CompanyListings';
 import PostListing from '../pages/company/PostListing';
 
+// Faculty Portal pages
+import FacultyDashboardPage from '../pages/faculty/FacultyDashboardPage';
+import FacultyInternsPage from '../pages/faculty/FacultyInternsPage';
+import FacultyLettersPage from '../pages/faculty/FacultyLettersPage';
+import FacultyReviewsPage from '../pages/faculty/FacultyReviewsPage';
+import FacultyProjectsPage from '../pages/faculty/FacultyProjectsPage';
+
 // Shared
 import SharedCompaniesPage from '../pages/SharedCompaniesPage';
 
@@ -40,6 +48,15 @@ function MentorRouteGuard() {
     return <Navigate to="/" replace />;
   }
   return <MentorDashboard />;
+}
+
+// Guard for Faculty Dashboard
+function FacultyRouteGuard({ children }) {
+  const { user } = useSelector((state) => state.auth);
+  if (user?.role !== 'Faculty') {
+    return <Navigate to="/" replace />;
+  }
+  return children;
 }
 
 // Guard to ensure only SuperAdmin can access super-admin routes
@@ -84,6 +101,9 @@ function RoleBasedDashboard() {
   if (user?.role === 'Company') {
     return <Navigate to="/company/dashboard" replace />;
   }
+  if (user?.role === 'Faculty') {
+    return <Navigate to="/faculty/dashboard" replace />;
+  }
   return <AdminDashboard />;
 }
 
@@ -113,6 +133,16 @@ function AppRoutes() {
         <Route path="projects" element={<StudentProjects />} />
         <Route path="tasks" element={<StudentTasks />} />
         <Route path="companies" element={<SharedCompaniesPage />} />
+      </Route>
+
+      {/* ── Faculty Portal routes (separate FacultyLayout) ── */}
+      <Route path="/faculty" element={<FacultyRouteGuard><FacultyLayout /></FacultyRouteGuard>}>
+        <Route index element={<Navigate to="/faculty/dashboard" replace />} />
+        <Route path="dashboard" element={<FacultyDashboardPage />} />
+        <Route path="interns" element={<FacultyInternsPage />} />
+        <Route path="letters" element={<FacultyLettersPage />} />
+        <Route path="reviews" element={<FacultyReviewsPage />} />
+        <Route path="projects" element={<FacultyProjectsPage />} />
       </Route>
 
       {/* All dashboard routes share the DashboardLayout shell */}
