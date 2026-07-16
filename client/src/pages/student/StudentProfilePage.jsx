@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfile } from "../../features/students/studentPortalSlice";
 import {
@@ -256,16 +256,35 @@ const EditProfileModal = ({ profile, onClose }) => {
 // ============================================================
 
 const StudentProfilePage = () => {
-  const { profile } = useSelector((s) => s.studentPortal);
+  const { profile: storedProfile } = useSelector((s) => s.studentPortal);
   const { reviews } = useSelector((s) => s.mentor);
   const { user } = useSelector((s) => s.auth);
+
+  const profile = {
+    ...storedProfile,
+    displayName: user?.name || storedProfile.displayName,
+    email: user?.email || storedProfile.email,
+  };
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const dispatch = useDispatch();
 
-  const handleUploadLetter = () => {
-    // Simulate an upload process
-    dispatch(uploadInternshipLetter("https://example.com/uploaded-internship-letter.pdf"));
+  const fileInputRef = useRef(null);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === "application/pdf") {
+      // Simulate an upload process using a dummy URL since there's no real backend storage
+      dispatch(uploadInternshipLetter("https://example.com/uploaded-internship-letter.pdf"));
+    } else if (file) {
+      alert("Please select a valid PDF file.");
+    }
+    // Reset the input so the same file can be selected again if needed
+    e.target.value = null;
   };
 
   const myReviews = reviews.filter((r) => r.internName === user?.name);
@@ -351,7 +370,7 @@ const StudentProfilePage = () => {
                 Letter Rejected by Faculty. Please upload a valid document.
               </div>
               <button
-                onClick={handleUploadLetter}
+                onClick={handleUploadClick}
                 className="w-full flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 bg-white py-4 text-sm font-medium text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors cursor-pointer"
               >
                 <Upload className="w-4 h-4" />
@@ -365,13 +384,22 @@ const StudentProfilePage = () => {
             </div>
           ) : (
             <button
-              onClick={handleUploadLetter}
+              onClick={handleUploadClick}
               className="w-full flex items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 bg-white py-4 text-sm font-medium text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-colors cursor-pointer"
             >
               <Upload className="w-4 h-4" />
               Upload Internship Letter
             </button>
           )}
+
+          {/* Hidden file input for PDF upload */}
+          <input 
+            type="file" 
+            accept=".pdf,application/pdf" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            className="hidden" 
+          />
         </div>
 
         {/* 3. Skills */}
