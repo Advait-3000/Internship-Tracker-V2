@@ -1,0 +1,40 @@
+import { seedDepartments } from "./seed/departments.seed.js";
+import { seedRoles } from "./seed/roles.seed.js";
+import { seedInternshipModes } from "./seed/internshipModes.seed.js";
+import { seedInternshipStatuses } from "./seed/internshipStatuses.seed.js";
+import { seedInternshipTypes } from "./seed/internshipTypes.seed.js";
+import { seedProjectStatuses } from "./seed/projectStatuses.seed.js";
+import { seedAcademicYears } from "./seed/academicYears.seed.js";
+import { seedDivisions } from "./seed/divisions.seed.js";
+import { seedSemesters } from "./seed/semesters.seed.js";
+import { seedStudentStatuses } from "./seed/studentStatuses.seed.js";
+import { seedChallengeTypes } from "./seed/challengeTypes.seed.js";
+import { seedDocumentTypes } from "./seed/documentTypes.seed.js";
+
+export async function runSeeds(db) {
+  // console.log("Seeding Departments...");
+  await seedDepartments(db);
+  // console.log("Seeding Roles...");
+  await seedRoles(db);
+  // console.log("Seeding InternshipModes...");
+  await seedInternshipModes(db);
+  // console.log("Seeding InternshipStatuses...");
+  await seedInternshipStatuses(db);
+  // console.log("Seeding InternshipTypes...");
+  await seedInternshipTypes(db);
+  // console.log("Seeding ProjectStatuses...");
+  await seedProjectStatuses(db);
+  // console.log("Seeding AcademicYears...");
+  await seedAcademicYears(db);
+  // console.log("Seeding Divisions...");
+  await seedDivisions(db);
+  // console.log("Seeding Semesters...");
+  await seedSemesters(db);
+  // console.log("Seeding StudentStatuses...");
+  await seedStudentStatuses(db);
+  // console.log("Seeding ChallengeTypes...");
+  await seedChallengeTypes(db);
+  // console.log("Seeding DocumentTypes...");
+  await seedDocumentTypes(db);
+  console.log("Seeding complete.");
+}
