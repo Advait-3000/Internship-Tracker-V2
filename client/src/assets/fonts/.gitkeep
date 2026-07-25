@@ -1,0 +1,3 @@
+# Fonts directory
+# Place custom font files (woff, woff2, ttf) here
+# Import them in shared/styles/index.css using @font-face
