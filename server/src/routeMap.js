@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import authRoutes from "./routes/auth.routes.js";
-// import userRoutes from "./routes/users.routes.js";
+import authRoutes from "./routes/authRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 // import departmentRoutes from "./routes/departments.routes.js";
 // import branchRoutes from "./routes/branches.routes.js";
@@ -40,7 +40,7 @@ import authRoutes from "./routes/auth.routes.js";
 const router = Router();
 
 router.use("/auth", authRoutes);
-// router.use("/users", userRoutes);
+router.use("/profile", profileRoutes);
 
 // router.use("/departments", departmentRoutes);
 // router.use("/branches", branchRoutes);
