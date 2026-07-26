@@ -1,7 +1,7 @@
 import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { db } from "../config/db.js";
-import { roles } from "../drizzle/schema/roles.schema.js";
+import { roles } from "../drizzle/schema/rolesSchema.js";
 import { eq } from "drizzle-orm";
 
 export const requireRole = (...allowedRoles) => {
