@@ -19,18 +19,17 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sign In</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Enter your credentials to access Internship Tracker
-          </p>
+    <div className="min-h-screen flex items-center justify-center bg-white p-4 sm:p-6">
+      <div className="w-full max-w-sm sm:max-w-md bg-gray border border-black rounded-2xl p-44px  sm:p-8 flex flex-col gap-6">
+        <div className="text-center">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+            Sign in to Account
+          </h1>
         </div>
         <LoginForm onSubmit={handleLoginSubmit} isLoading={loading} />
-        <div className="mt-6 text-center text-xs text-gray-500">
+        <div className="text-center text-xs text-gray-500">
           Don't have an account?{" "}
-          <Link to="/register" className="text-blue-600 font-semibold hover:underline">
+          <Link to="/register" className="font-semibold text-blue-600 hover:underline">
             Register here
           </Link>
         </div>

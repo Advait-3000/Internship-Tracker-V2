@@ -11,7 +11,7 @@ const App = () => {
       <ErrorBoundary>
         <BrowserRouter>
           <AppRouter />
-          <p>Hello DK</p>
+          
         </BrowserRouter>
       </ErrorBoundary>
     </Provider>
