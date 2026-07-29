@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/usersRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 // import departmentRoutes from "./routes/departments.routes.js";
 // import branchRoutes from "./routes/branches.routes.js";
@@ -41,6 +42,7 @@ const router = Router();
 
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
+router.use("/profiles", profileRoutes);
 
 // router.use("/departments", departmentRoutes);
 // router.use("/branches", branchRoutes);
