@@ -1,3 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "./shared/styles/index.css";
+
+/* Force Tailwind dark: utility classes to require an explicit .dark class, ignoring OS system dark mode */
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--bg, #f8fafc);
+  color: var(--text-primary, #0f172a);
+}
