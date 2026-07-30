@@ -11,175 +11,106 @@
 /* ================================
    Global Design System
 ================================ */
-
 :root {
 
-  /* ================================
-     Colors
-  ================================ */
+  /* ===== Brand ===== */
 
-  /* Brand */
-  --primary: #ff7a00;
-  --primary-light: #ff9a33;
-  --primary-dark: #d85f00;
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-light: #DBEAFE;
 
-  /* Secondary */
-  --secondary: #ffb347;
-  --accent: #ffd580;
+  /* ===== Accent Colors ===== */
 
-  /* Backgrounds */
-  --bg: #090909;
-  --bg-secondary: #111111;
-  --bg-card: #181818;
-  --bg-glass: rgba(255, 255, 255, 0.05);
+  --green: #34A853;
+  --green-light: #DCFCE7;
 
-  /* Text */
-  --text-primary: #ffffff;
-  --text-secondary: #c9c9c9;
-  --text-muted: #8f8f8f;
-  --text-dark: #111111;
+  --yellow: #F4B400;
+  --yellow-light: #FEF3C7;
 
-  /* Borders */
-  --border: rgba(255,255,255,0.08);
-  --border-light: rgba(255,255,255,0.15);
+  --purple: #7C4DFF;
+  --purple-light: #EDE9FE;
 
-  /* Status */
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
+  --cyan: #29C5F6;
+  --cyan-light: #CFFAFE;
 
-  /* ================================
-     Gradients
-  ================================ */
+  --red: #EF4444;
+  --red-light: #FEE2E2;
 
-  --gradient-primary: linear-gradient(
-    135deg,
-    #ff7a00 0%,
-    #ffb347 100%
-  );
+  /* ===== Background ===== */
 
-  --gradient-dark: linear-gradient(
-    180deg,
-    #111111 0%,
-    #050505 100%
-  );
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-hover: #F1F5F9;
+  --sidebar: #FFFFFF;
 
-  --gradient-glow: radial-gradient(
-    circle,
-    rgba(255,122,0,.35),
-    transparent 70%
-  );
+  /* ===== Text ===== */
 
-  /* ================================
-     Typography
-  ================================ */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --text-white: #FFFFFF;
 
-  --font-primary: "Poppins", sans-serif;
-  --font-heading: "Cinzel", serif;
-  --font-body: "Inter", sans-serif;
+  /* ===== Border ===== */
 
-  /* Font Sizes */
+  --border: #E2E8F0;
+  --border-light: #F1F5F9;
 
-  --fs-xs: .75rem;
-  --fs-sm: .875rem;
-  --fs-base: 1rem;
-  --fs-md: 1.125rem;
-  --fs-lg: 1.25rem;
-  --fs-xl: 1.5rem;
-  --fs-2xl: 2rem;
-  --fs-3xl: 3rem;
-  --fs-4xl: 4rem;
-  --fs-5xl: 5rem;
+  /* ===== Status ===== */
 
-  /* Font Weight */
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --danger: #DC2626;
+  --info: #2563EB;
 
-  --fw-light: 300;
-  --fw-regular: 400;
-  --fw-medium: 500;
-  --fw-semibold: 600;
-  --fw-bold: 700;
-  --fw-black: 800;
+  /* ===== Shadows ===== */
 
-  /* Line Height */
+  --shadow-sm: 0 1px 3px rgba(15,23,42,.08);
+  --shadow-md: 0 8px 24px rgba(15,23,42,.08);
+  --shadow-lg: 0 20px 40px rgba(15,23,42,.10);
 
-  --lh-tight: 1.1;
-  --lh-normal: 1.5;
-  --lh-relaxed: 1.8;
+  /* ===== Radius ===== */
 
-  /* ================================
-     Spacing
-  ================================ */
-
-  --space-1: .25rem;
-  --space-2: .5rem;
-  --space-3: .75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-7: 3rem;
-  --space-8: 4rem;
-  --space-9: 6rem;
-  --space-10: 8rem;
-
-  /* ================================
-     Border Radius
-  ================================ */
-
-  --radius-sm: 6px;
+  --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 18px;
   --radius-xl: 24px;
   --radius-full: 999px;
 
-  /* ================================
-     Shadows
-  ================================ */
+  /* ===== Typography ===== */
 
-  --shadow-sm: 0 2px 10px rgba(0,0,0,.2);
+  --font-heading: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
 
-  --shadow-md: 0 8px 25px rgba(0,0,0,.3);
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-base: 16px;
+  --fs-lg: 18px;
+  --fs-xl: 20px;
+  --fs-2xl: 24px;
+  --fs-3xl: 32px;
+  --fs-4xl: 48px;
 
-  --shadow-lg: 0 20px 45px rgba(0,0,0,.45);
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
 
-  --shadow-primary: 0 0 30px rgba(255,122,0,.35);
+  /* ===== Layout ===== */
 
-  /* ================================
-     Blur
-  ================================ */
+  --sidebar-width: 220px;
+  --header-height: 72px;
+  --container-padding: 24px;
+  --card-padding: 24px;
 
-  --blur-sm: 8px;
-  --blur-md: 14px;
-  --blur-lg: 24px;
-
-  /* ================================
-     Container
-  ================================ */
-
-  --container-width: 1280px;
-  --container-padding: 1.5rem;
-
-  /* ================================
-     Navbar
-  ================================ */
-
-  --nav-height: 80px;
-
-  /* ================================
-     Transition
-  ================================ */
+  /* ===== Animation ===== */
 
   --transition-fast: .2s ease;
-  --transition: .35s ease;
-  --transition-slow: .6s ease;
+  --transition: .3s ease;
 
-  /* ================================
-     Z Index
-  ================================ */
+  /* ===== Z Index ===== */
 
-  --z-dropdown: 100;
-  --z-sticky: 500;
-  --z-fixed: 1000;
-  --z-modal: 2000;
-  --z-loader: 5000;
+  --z-sidebar: 100;
+  --z-navbar: 200;
+  --z-dropdown: 500;
+  --z-modal: 1000;
 }
