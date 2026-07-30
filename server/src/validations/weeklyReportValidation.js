@@ -1,27 +1,45 @@
 import { z } from "zod";
-import { handleValidationError } from "./validate.helper.js";
+import { handleValidationError } from "../utils/validateHelper.js";
 
 export class WeeklyReportValidator {
   static createWeeklyReportSchema = z.object({
     internshipId: z.string().uuid("Invalid internship ID format"),
+    projectId: z.string().uuid("Invalid project ID format").optional().nullable(),
     weekNumber: z.union([z.string(), z.number()], { required_error: "Week number must be provided" }),
-    startDate: z.string().min(1, "Start date must be provided"),
-    endDate: z.string().min(1, "End date must be provided"),
-    summary: z.string().min(1, "Summary must be provided"),
-    tasksCompleted: z.string().optional(),
-    challengesFaced: z.string().optional(),
-    learnings: z.string().optional(),
+    reportingFrom: z.string().min(1, "Reporting from date must be provided"),
+    reportingTo: z.string().min(1, "Reporting to date must be provided"),
+    totalHoursWorked: z.union([z.string(), z.number()]).optional().nullable(),
+    workingDays: z.union([z.string(), z.number()]).optional().nullable(),
+    attendancePercentage: z.union([z.string(), z.number()]).optional().nullable(),
+    leaveTaken: z.union([z.string(), z.number()]).optional().nullable(),
+    leaveReason: z.string().optional().nullable(),
+    keyTasksCompleted: z.string().optional().nullable(),
+    technologiesUsed: z.any().optional().nullable(), // For JSON
+    deliverablesSubmitted: z.string().optional().nullable(),
+    skillsLearned: z.string().optional().nullable(),
+    ongoingTasks: z.string().optional().nullable(),
+    targetGoals: z.string().optional().nullable(),
+    projectStatusId: z.string().uuid("Invalid project status ID format").optional().nullable(),
   });
 
   static updateWeeklyReportSchema = z.object({
     internshipId: z.string().uuid("Invalid internship ID format").optional(),
+    projectId: z.string().uuid("Invalid project ID format").optional().nullable(),
     weekNumber: z.union([z.string(), z.number()]).optional(),
-    startDate: z.string().min(1, "Start date must be provided").optional(),
-    endDate: z.string().min(1, "End date must be provided").optional(),
-    summary: z.string().min(1, "Summary must be provided").optional(),
-    tasksCompleted: z.string().optional(),
-    challengesFaced: z.string().optional(),
-    learnings: z.string().optional(),
+    reportingFrom: z.string().min(1, "Reporting from date must be provided").optional(),
+    reportingTo: z.string().min(1, "Reporting to date must be provided").optional(),
+    totalHoursWorked: z.union([z.string(), z.number()]).optional().nullable(),
+    workingDays: z.union([z.string(), z.number()]).optional().nullable(),
+    attendancePercentage: z.union([z.string(), z.number()]).optional().nullable(),
+    leaveTaken: z.union([z.string(), z.number()]).optional().nullable(),
+    leaveReason: z.string().optional().nullable(),
+    keyTasksCompleted: z.string().optional().nullable(),
+    technologiesUsed: z.any().optional().nullable(),
+    deliverablesSubmitted: z.string().optional().nullable(),
+    skillsLearned: z.string().optional().nullable(),
+    ongoingTasks: z.string().optional().nullable(),
+    targetGoals: z.string().optional().nullable(),
+    projectStatusId: z.string().uuid("Invalid project status ID format").optional().nullable(),
   });
 
   static validateCreateWeeklyReport(data) {
