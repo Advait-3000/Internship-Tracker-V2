@@ -5,6 +5,10 @@ import { getDashboardRouteForRole } from "@/features/auth/utils/auth.utils";
 import aumLogo from "@/assets/images/aum logo with tag.png";
 import buildingImg from "@/assets/images/building image.png";
 import sunilRane from "@/assets/images/sunilRane 1.png";
+import cloudImg from "@/assets/images/cloud.png";
+import hatImg from "@/assets/images/hat.png";
+import houseImg from "@/assets/images/house.png";
+import kiteImg from "@/assets/images/kite.png";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -55,38 +59,52 @@ const Register = () => {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #eaf3fb 0%, #f0f6fd 50%, #e8f0fe 100%)" }}
+      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-[#f8fbff]"
+      style={{ background: "linear-gradient(135deg, #f2f7ff 0%, #f8fbff 50%, #f0f6fe 100%)" }}
     >
+      {/* ── AUM Logo – top left ── */}
+      <img
+        src={aumLogo}
+        alt="Atharva University Mumbai"
+        className="absolute top-6 left-6 md:top-8 md:left-10 w-44 sm:w-52 md:w-64 object-contain select-none pointer-events-none z-20"
+      />
+
+      {/* ── House Constellation – middle left ── */}
+      <img
+        src={houseImg}
+        alt="House Constellation"
+        className="absolute top-[26%] left-6 md:left-14 w-36 sm:w-44 md:w-56 object-contain select-none pointer-events-none z-10"
+      />
+
       {/* ── Background building illustration – bottom left ── */}
       <img
         src={buildingImg}
         alt="Atharva University Building"
-        className="absolute bottom-0 left-0 w-[340px] sm:w-[420px] object-contain object-bottom opacity-60 select-none pointer-events-none"
+        className="absolute bottom-0 left-0 w-[260px] sm:w-[360px] md:w-[440px] lg:w-[480px] object-contain object-bottom select-none pointer-events-none z-10"
       />
+
+      {/* ── Cloud illustration – top right ── */}
+      <img
+        src={cloudImg}
+        alt="Cloud"
+        className="absolute top-4 right-6 md:top-6 md:right-55 w-44 sm:w-56 md:w-64 object-contain select-none pointer-events-none z-10"
+      />
+
+    
 
       {/* ── Sunil Rane – bottom right ── */}
       <img
         src={sunilRane}
         alt="Sunil Rane"
-        className="absolute bottom-0 right-2 w-[380px] sm:w-[330px] object-contain object-bottom select-none pointer-events-none"
-        style={{ filter: "drop-shadow(0 4px 16px rgba(30,60,120,0.10))" }}
+        className="absolute bottom-0 right-2 md:right-6 w-[240px] sm:w-[300px] md:w-[390px] object-contain object-bottom select-none pointer-events-none z-10"
+        style={{ filter: "drop-shadow(0 4px 16px rgba(30,60,120,0.12))" }}
       />
 
       {/* ── Main content wrapper ── */}
-      <div className="relative z-10 w-full max-w-2xl mx-4 my-6">
-
-        {/* AUM horizontal logo – top left of card area */}
-        <div className="mb-3 ml-1">
-          <img
-            src={aumLogo}
-            alt="Atharva University Mumbai"
-            className="h-14 object-contain"
-          />
-        </div>
+      <div className="relative z-30 w-full max-w-2xl mx-4 my-8">
 
         {/* ── Form Card ── */}
-        <div className="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-2xl border border-blue-100/80 overflow-hidden">
           {/* Card header */}
           <div
             className="px-6 py-3.5 text-center"
