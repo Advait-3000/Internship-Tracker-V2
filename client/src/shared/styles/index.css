@@ -114,3 +114,8 @@
   --z-dropdown: 500;
   --z-modal: 1000;
 }
+
+body{
+   background-color: var(--primary-light);
+   color: var(--text-primary);
+}
