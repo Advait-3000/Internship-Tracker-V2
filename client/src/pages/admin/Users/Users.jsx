@@ -9,6 +9,7 @@ const AdminUsers = () => {
 
   const sidebarLinks = [
     { label: "Dashboard", to: "/admin/dashboard" },
+    { label: "Students", to: "/admin/students" },
     { label: "User Management", to: "/admin/users" },
     { label: "Internships Overview", to: "/admin/internships" },
     { label: "Reports & Analytics", to: "/admin/reports" },

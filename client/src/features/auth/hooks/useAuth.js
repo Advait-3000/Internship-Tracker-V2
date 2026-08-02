@@ -26,6 +26,21 @@ export const useAuth = () => {
     }
   };
 
+  const bypassLogin = (role = "student") => {
+    const mockUser = {
+      id: `dev-${role}-100`,
+      name: `Dev ${role.charAt(0).toUpperCase() + role.slice(1)}`,
+      email: `${role}@dev.local`,
+      role: role,
+    };
+    const data = {
+      user: mockUser,
+      token: `dev-bypass-token-${role}-${Date.now()}`,
+    };
+    dispatch(setCredentials(data));
+    return data;
+  };
+
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -38,6 +53,7 @@ export const useAuth = () => {
     error,
     login,
     register,
+    bypassLogin,
     logout: handleLogout,
   };
 };

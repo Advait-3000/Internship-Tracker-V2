@@ -71,7 +71,11 @@ const AppRouter = () => {
             <Route path={ROUTES.STUDENT.DASHBOARD}    element={<StudentDashboard />} />
             <Route path={ROUTES.STUDENT.INTERNSHIPS}  element={<StudentInternships />} />
             <Route path={ROUTES.STUDENT.APPLICATIONS} element={<StudentApplications />} />
-            <Route path={ROUTES.STUDENT.PROFILE}      element={<StudentProfile />} />
+          </Route>
+
+          {/* Shared profile access (Students, Admins, Faculty, Mentors) */}
+          <Route element={<RoleRoute allowedRoles={[ROLES.STUDENT, ROLES.ADMIN, ROLES.FACULTY, ROLES.MENTOR, ROLES.SUPERADMIN]} />}>
+            <Route path={ROUTES.STUDENT.PROFILE} element={<StudentProfile />} />
           </Route>
 
           {/* Faculty */}

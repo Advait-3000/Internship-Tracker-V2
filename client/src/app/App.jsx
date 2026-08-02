@@ -12,9 +12,7 @@ const App = () => {
     <Provider store={store}>
       <ErrorBoundary>
         <BrowserRouter>
-          {/* <AppRouter /> */}
-          <AdminDashboard />
-          {/* <StudentProfile /> */}
+          <AppRouter />
         </BrowserRouter>
       </ErrorBoundary>
     </Provider>

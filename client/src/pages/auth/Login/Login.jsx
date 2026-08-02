@@ -3,12 +3,13 @@ import { useNavigate, Link } from "react-router-dom";
 import LoginForm from "@/features/auth/components/LoginForm";
 import useAuth from "@/features/auth/hooks/useAuth";
 import { getDashboardRouteForRole } from "@/features/auth/utils/auth.utils";
+import { ROLES } from "@/shared/constants/roles";
 import atharvaLogo from "@/assets/images/Atharva_uni.png";
 import sunilRane from "@/assets/images/sunilRane 1.png";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, loading } = useAuth();
+  const { login, bypassLogin, loading } = useAuth();
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleLoginSubmit = async (credentials) => {
@@ -23,9 +24,21 @@ const Login = () => {
     }
   };
 
+  const handleBypass = (role) => {
+    setErrorMsg("");
+    try {
+      bypassLogin(role);
+      const redirectPath = getDashboardRouteForRole(role);
+      navigate(redirectPath);
+    } catch (err) {
+      console.error("Bypass failed:", err);
+      setErrorMsg("Bypass login failed. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 sm:p-6">
-      <div className="flex w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl bg-white   h-[700px]">
+      <div className="flex w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl bg-white min-h-[720px] h-auto">
 
         {/* ── LEFT PANEL ── */}
         <div className="flex flex-col items-center justify-center bg-white w-full md:w-1/2 px-6 py-6 sm:px-8 sm:py-8 gap-4">
@@ -33,8 +46,36 @@ const Login = () => {
           <img
             src={atharvaLogo}
             alt="Atharva University Logo"
-            className="w-48 h-48 sm:w-[220px] sm:h-[220px] object-contain transition-transform duration-300 hover:scale-105"
+            className="w-44 h-44 sm:w-[190px] sm:h-[190px] object-contain transition-transform duration-300 hover:scale-105 -my-2"
           />
+
+          {/* ⚡ DEV QUICK BYPASS PANEL */}
+          <div className="w-full max-w-[340px] bg-amber-50 border-2 border-amber-400 rounded-xl p-3.5 shadow-sm transition-all">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold text-amber-900 flex items-center gap-1">
+                <span>⚡ DEV QUICK BYPASS</span>
+              </span>
+              <span className="text-[10px] bg-amber-200 text-amber-950 font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
+                Dev Only
+              </span>
+            </div>
+            <p className="text-[11px] text-amber-800 mb-2.5 leading-tight font-medium">
+              Click any role below to instantly log in & explore its pages:
+            </p>
+            <div className="grid grid-cols-3 gap-1.5">
+              {Object.values(ROLES).map((role) => (
+                <button
+                  key={role}
+                  type="button"
+                  onClick={() => handleBypass(role)}
+                  className="bg-white hover:bg-amber-100 active:scale-95 text-amber-950 border border-amber-300 font-bold text-[10px] sm:text-[11px] py-1.5 px-1 rounded-lg transition-all shadow-2xs hover:shadow text-center uppercase tracking-wide cursor-pointer flex items-center justify-center truncate"
+                  title={`Instant access to ${role} dashboard`}
+                >
+                  {role}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Form card */}
           <div className="w-full max-w-[340px] bg-white border border-gray-200 rounded-xl shadow-sm px-5 py-5 sm:px-6 sm:py-6 flex flex-col gap-4">
