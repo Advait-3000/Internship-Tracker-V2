@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LoginForm from "@/features/auth/components/LoginForm";
 import useAuth from "@/features/auth/hooks/useAuth";
@@ -9,14 +9,17 @@ import sunilRane from "@/assets/images/sunilRane 1.png";
 const Login = () => {
   const navigate = useNavigate();
   const { login, loading } = useAuth();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleLoginSubmit = async (credentials) => {
+    setErrorMsg("");
     try {
       const data = await login(credentials);
       const redirectPath = getDashboardRouteForRole(data?.user?.role || "student");
       navigate(redirectPath);
     } catch (err) {
       console.error("Login failed:", err);
+      setErrorMsg(err?.response?.data?.message || err?.message || "Login failed. Please try again.");
     }
   };
 
@@ -38,6 +41,11 @@ const Login = () => {
             <h1 className="text-center text-lg sm:text-xl font-bold text-gray-800 tracking-tight">
               Sign in to Account
             </h1>
+            {errorMsg && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-xs px-3 py-2 rounded-lg text-center font-medium">
+                {errorMsg}
+              </div>
+            )}
             <LoginForm onSubmit={handleLoginSubmit} isLoading={loading} />
             <div className="text-center text-xs text-gray-500 pt-10">
               Don't have an account?{" "}

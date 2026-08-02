@@ -13,6 +13,7 @@ import kiteImg from "@/assets/images/kite.png";
 const Register = () => {
   const navigate = useNavigate();
   const { register, loading } = useAuth();
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -36,11 +37,12 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
     try {
       const userData = {
         name: formData.fullName,
         email: formData.email,
-        password: formData.mobileNo, // placeholder; extend as needed
+        password: formData.mobileNo || "DefaultPass123!", // fallback if mobile empty
         role: "student",
         ...formData,
       };
@@ -49,6 +51,7 @@ const Register = () => {
       navigate(redirectPath);
     } catch (err) {
       console.error("Registration failed:", err);
+      setErrorMsg(err?.response?.data?.message || err?.message || "Registration failed. Please check your inputs.");
     }
   };
 
@@ -120,6 +123,11 @@ const Register = () => {
 
           {/* Form body */}
           <form onSubmit={handleSubmit} className="px-6 py-4 space-y-3">
+            {errorMsg && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-xs px-3 py-2 rounded-lg text-center font-medium">
+                {errorMsg}
+              </div>
+            )}
 
             {/* Full Name */}
             <div>

@@ -31,6 +31,7 @@ export const ROUTES = {
 
   ADMIN: {
     DASHBOARD: '/admin/dashboard',
+    STUDENTS: '/admin/students',
     USERS: '/admin/users',
     INTERNSHIPS: '/admin/internships',
     REPORTS: '/admin/reports',

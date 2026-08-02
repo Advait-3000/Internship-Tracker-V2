@@ -19,6 +19,7 @@ import StudentReports from "./components/StudentReports";
 // ---- Sidebar links for admin ----
 const SIDEBAR_LINKS = [
   { label: "Dashboard", to: "/admin/dashboard" },
+  { label: "Students", to: "/admin/students" },
   { label: "User Management", to: "/admin/users" },
   { label: "Internships Overview", to: "/admin/internships" },
   { label: "Reports & Analytics", to: "/admin/reports" },
