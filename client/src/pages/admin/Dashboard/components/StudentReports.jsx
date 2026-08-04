@@ -147,7 +147,10 @@ const STATUSES = ["All", "Good", "Average", "Bad"];
 
 // ---- List Row ----
 const ListRow = ({ student, onClick }) => (
-  <tr onClick={onClick} className="border-b border-[var(--border-light)] hover:bg-[var(--surface-hover)] transition-colors cursor-pointer">
+  <tr 
+    onClick={() => onClick(student)}
+    className="border-b border-[var(--border-light)] hover:bg-[var(--surface-hover)] transition-colors cursor-pointer"
+  >
     <td className="py-3 px-4 text-[length:var(--fs-xs)] text-[var(--text-muted)] font-[var(--fw-medium)]">{student.id}</td>
     <td className="py-3 px-4">
       <div className="flex items-center gap-2.5">
@@ -170,7 +173,10 @@ const ListRow = ({ student, onClick }) => (
 
 // ---- Grid Card ----
 const GridCard = ({ student, onClick }) => (
-  <div onClick={onClick} className={`bg-[var(--surface)] rounded-[var(--radius-xl)] border-2 p-4 flex flex-col gap-3 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-all cursor-pointer ${student.topRank || student.topStudent ? "border-[var(--primary)]" : "border-[var(--border-light)]"}`}>
+  <div 
+    onClick={() => onClick(student)}
+    className={`bg-[var(--surface)] rounded-[var(--radius-xl)] border-2 p-4 flex flex-col gap-3 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-all cursor-pointer ${student.topRank || student.topStudent ? "border-[var(--primary)]" : "border-[var(--border-light)]"}`}
+  >
     <div className="flex items-start gap-3">
       {/* Avatar / image */}
       <div className={`w-14 h-14 rounded-[var(--radius-lg)] flex items-center justify-center text-[length:var(--fs-base)] font-[var(--fw-bold)] flex-shrink-0 overflow-hidden ${student.avatarBg}`}>
@@ -218,6 +224,10 @@ const StudentReports = () => {
   const [filterDept, setFilterDept] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All");
   const [showFilterPanel, setShowFilterPanel] = useState(false);
+
+  const handleStudentClick = (student) => {
+    navigate(`/admin/students/${student.id}`, { state: { student } });
+  };
 
   const filtered = useMemo(() => {
     let result = [...STUDENTS];
@@ -410,7 +420,7 @@ const StudentReports = () => {
             </thead>
             <tbody>
               {filtered.map((student) => (
-                <ListRow key={student.id} student={student} onClick={() => navigate("/student/profile")} />
+                <ListRow key={student.id} student={student} onClick={handleStudentClick} />
               ))}
             </tbody>
           </table>
@@ -418,7 +428,7 @@ const StudentReports = () => {
       ) : (
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4">
           {filtered.map((student) => (
-            <GridCard key={student.id} student={student} onClick={() => navigate("/student/profile")} />
+            <GridCard key={student.id} student={student} onClick={handleStudentClick} />
           ))}
         </div>
       )}

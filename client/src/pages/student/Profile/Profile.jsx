@@ -9,41 +9,38 @@ import ProjectDetailsKanban from "./components/ProjectDetailsKanban";
 import MetricsGrid from "./components/MetricsGrid";
 import FooterSection from "./components/FooterSection";
 
-const StudentProfile = () => {
-  const { user, logout } = useAuth();
-
-  const isAdmin = user?.role === "admin" || user?.role === "superadmin";
-
-  const sidebarLinks = isAdmin
-    ? [
-        { label: "Dashboard", to: "/admin/dashboard" },
-        { label: "Students", to: "/admin/students" },
-        { label: "User Management", to: "/admin/users" },
-        { label: "Internships Overview", to: "/admin/internships" },
-        { label: "Reports & Analytics", to: "/admin/reports" },
-      ]
-    : [
-        { label: "Dashboard", to: "/student/dashboard" },
-        { label: "Browse Internships", to: "/student/internships" },
-        { label: "My Applications", to: "/student/applications" },
-        { label: "My Profile", to: "/student/profile" },
-      ];
-
+/**
+ * StudentProfile — pure content component, no layout shell.
+ *
+ * @param {object} student  Optional student data from the parent context.
+ *   Fields used dynamically:
+ *     - name        {string}  Student's full name
+ *     - role        {string}  e.g. "Manager", "Engineer"
+ *     - department  {string}  e.g. "Operations", "IT"
+ *     - company     {string}  e.g. "BCG / XLRI / National Winner"
+ *     - rating      {number}  e.g. 4.9
+ *     - achievements {string} One-line achievements text
+ *     - topStudent  {boolean} Show "Top Student" badge
+ *     - topRank     {boolean} Show "Top Rank" badge
+ *     - tags        {string[]} Skill/expertise tags
+ *
+ *   Fields that stay static (pulled from assets / hardcoded):
+ *     - Heatmap, Kanban tasks, project status graph, skills bars,
+ *       mentor info, mentee reviews.
+ *
+ *   If no student prop is provided, the component falls back to
+ *   the default "Parth Bhalala" static data (useful for dev/preview).
+ */
+const StudentProfile = ({ student = null }) => {
   return (
-    <DashboardLayout
-      user={user || { name: "Student User", role: "student" }}
-      sidebarLinks={sidebarLinks}
-      onLogout={logout}
-    >
-      <div className="bg-white rounded-2xl p-6 md:p-8 max-w-[1100px] mx-auto space-y-6">
-        <ProfileHeaderBanner />
-        <MentorTaskGrid />
-        <AttendanceRecord />
-        <ProjectDetailsKanban />
-        <MetricsGrid />
-        <FooterSection />
-      </div>
-    </DashboardLayout>
+    <div className="bg-white rounded-2xl p-6 md:p-8 max-w-[1100px] mx-auto">
+      <ProfileHeaderBanner student={student} />
+      <MentorTaskGrid />
+      <AttendanceRecord />
+      <ProjectDetailsKanban />
+      <MetricsGrid />
+      <FooterSection />
+    </div>
   );
 };
 
