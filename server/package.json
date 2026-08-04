@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
+  "type": "module",
   "author": "CSI-ACE",
   "license": "ISC",
   "dependencies": {
