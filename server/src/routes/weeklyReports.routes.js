@@ -8,6 +8,7 @@ router.use(verifyJWT);
 
 router.post("/", WeeklyReportController.createWeeklyReport);
 router.get("/", WeeklyReportController.getWeeklyReports);
+router.get("/:id", WeeklyReportController.getWeeklyReportById);
 router.put("/:id", WeeklyReportController.updateWeeklyReport);
 
 export default router;

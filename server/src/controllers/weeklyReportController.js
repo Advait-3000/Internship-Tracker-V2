@@ -13,6 +13,11 @@ class WeeklyReportController {
     res.status(200).json(new ApiResponse(200, reports, "Weekly reports retrieved successfully"));
   });
 
+  getWeeklyReportById = asyncHandler(async (req, res) => {
+    const report = await WeeklyReportService.getWeeklyReportById(req.params.id, req.user);
+    res.status(200).json(new ApiResponse(200, report, "Weekly report retrieved successfully"));
+  });
+
   updateWeeklyReport = asyncHandler(async (req, res) => {
     const updatedReport = await WeeklyReportService.updateWeeklyReport(req.params.id, req.body);
     res.status(200).json(new ApiResponse(200, updatedReport, "Weekly report updated successfully"));

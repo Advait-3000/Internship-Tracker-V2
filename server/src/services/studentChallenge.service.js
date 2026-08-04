@@ -90,7 +90,7 @@ class StudentChallengeService {
           }
         } else if (roleName === "COMPANY_MENTOR") {
           const companyMentorRecord = await db.query.companyMentors.findFirst({
-            where: eq(companyMentors.userId, user._id)
+            where: eq(companyMentors.email, requester.email)
           });
           if (!companyMentorRecord) {
             allowedInternshipIds = [];
@@ -131,6 +131,28 @@ class StudentChallengeService {
       where: whereClause,
       orderBy: [desc(studentChallenges.createdAt)],
     });
+  }
+
+  async getStudentChallengeById(id, user = null) {
+    const validId = StudentChallengeValidator.validateId(id, "Student Challenge ID");
+    
+    const challenge = await db.query.studentChallenges.findFirst({
+      where: eq(studentChallenges.id, validId),
+    });
+
+    if (!challenge) {
+      throw new ApiError(404, "Student challenge not found");
+    }
+
+    // Role-based access validation for this specific challenge
+    const allowedChallenges = await this.getStudentChallenges({ internshipId: challenge.internshipId }, user);
+    const hasAccess = allowedChallenges.some(c => c.id === validId);
+
+    if (!hasAccess && user && user.role !== "SUPERADMIN") {
+      throw new ApiError(403, "You do not have permission to view this student challenge");
+    }
+
+    return challenge;
   }
 
   async updateStudentChallenge(id, data) {

@@ -13,6 +13,11 @@ class LearningOutcomeController {
     res.status(200).json(new ApiResponse(200, outcomes, "Learning outcomes retrieved successfully"));
   });
 
+  getLearningOutcomeById = asyncHandler(async (req, res) => {
+    const outcome = await LearningOutcomeService.getLearningOutcomeById(req.params.id, req.user);
+    res.status(200).json(new ApiResponse(200, outcome, "Learning outcome retrieved successfully"));
+  });
+
   updateLearningOutcome = asyncHandler(async (req, res) => {
     const updatedOutcome = await LearningOutcomeService.updateLearningOutcome(req.params.id, req.body);
     res.status(200).json(new ApiResponse(200, updatedOutcome, "Learning outcome updated successfully"));

@@ -90,7 +90,7 @@ class WeeklyReportService {
           }
         } else if (roleName === "COMPANY_MENTOR") {
           const companyMentorRecord = await db.query.companyMentors.findFirst({
-            where: eq(companyMentors.userId, user._id)
+            where: eq(companyMentors.email, requester.email)
           });
           if (!companyMentorRecord) {
             allowedInternshipIds = [];
@@ -134,6 +134,30 @@ class WeeklyReportService {
       where: whereClause,
       orderBy: [desc(weeklyReports.submittedAt)],
     });
+  }
+
+  async getWeeklyReportById(id, user = null) {
+    const validId = WeeklyReportValidator.validateId(id, "Weekly Report ID");
+    
+    // Check role-based access by reusing getWeeklyReports logic with internshipId filter
+    // Alternatively, just query it and then check access, or simpler: just use getWeeklyReports and append an eq(id)
+    const report = await db.query.weeklyReports.findFirst({
+      where: eq(weeklyReports.id, validId),
+    });
+
+    if (!report) {
+      throw new ApiError(404, "Weekly report not found");
+    }
+
+    // Role-based access validation for this specific report
+    const allowedReports = await this.getWeeklyReports({ internshipId: report.internshipId }, user);
+    const hasAccess = allowedReports.some(r => r.id === validId);
+
+    if (!hasAccess && user && user.role !== "SUPERADMIN") {
+      throw new ApiError(403, "You do not have permission to view this weekly report");
+    }
+
+    return report;
   }
 
   async updateWeeklyReport(id, data) {

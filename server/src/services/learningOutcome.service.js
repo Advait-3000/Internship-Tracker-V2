@@ -89,7 +89,7 @@ class LearningOutcomeService {
           }
         } else if (roleName === "COMPANY_MENTOR") {
           const companyMentorRecord = await db.query.companyMentors.findFirst({
-            where: eq(companyMentors.userId, user._id)
+            where: eq(companyMentors.email, requester.email)
           });
           if (!companyMentorRecord) {
             allowedInternshipIds = [];
@@ -130,6 +130,28 @@ class LearningOutcomeService {
       where: whereClause,
       orderBy: [desc(learningOutcomes.id)],
     });
+  }
+
+  async getLearningOutcomeById(id, user = null) {
+    const validId = LearningOutcomeValidator.validateId(id, "Learning Outcome ID");
+    
+    const outcome = await db.query.learningOutcomes.findFirst({
+      where: eq(learningOutcomes.id, validId),
+    });
+
+    if (!outcome) {
+      throw new ApiError(404, "Learning outcome not found");
+    }
+
+    // Role-based access validation for this specific outcome
+    const allowedOutcomes = await this.getLearningOutcomes({ internshipId: outcome.internshipId }, user);
+    const hasAccess = allowedOutcomes.some(o => o.id === validId);
+
+    if (!hasAccess && user && user.role !== "SUPERADMIN") {
+      throw new ApiError(403, "You do not have permission to view this learning outcome");
+    }
+
+    return outcome;
   }
 
   async updateLearningOutcome(id, data) {

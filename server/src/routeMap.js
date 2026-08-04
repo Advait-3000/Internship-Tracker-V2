@@ -3,6 +3,9 @@ import { Router } from "express";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/usersRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import weeklyReportRoutes from "./routes/weeklyReports.routes.js";
+import learningOutcomeRoutes from "./routes/learningOutcomes.routes.js";
+import studentChallengeRoutes from "./routes/studentChallenges.routes.js";
 
 // import departmentRoutes from "./routes/departments.routes.js";
 // import branchRoutes from "./routes/branches.routes.js";
@@ -26,7 +29,6 @@ import profileRoutes from "./routes/profileRoutes.js";
 // import internshipRoutes from "./routes/internships.routes.js";
 // import projectRoutes from "./routes/projects.routes.js";
 // import dailyWorkLogRoutes from "./routes/dailyWorkLogs.routes.js";
-import reviewFormRoutes from "./routes/reviewForm.routes.js";
 // import mentorReviewRoutes from "./routes/mentorReviews.routes.js";
 // import finalFeedbackRoutes from "./routes/finalFeedback.routes.js";
 // import documentRoutes from "./routes/documents.routes.js";
@@ -41,6 +43,9 @@ const router = Router();
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
 router.use("/profiles", profileRoutes);
+router.use("/weekly-reports", weeklyReportRoutes);
+router.use("/learning-outcomes", learningOutcomeRoutes);
+router.use("/student-challenges", studentChallengeRoutes);
 
 // router.use("/departments", departmentRoutes);
 // router.use("/branches", branchRoutes);
@@ -64,8 +69,6 @@ router.use("/profiles", profileRoutes);
 // router.use("/internships", internshipRoutes);
 // router.use("/projects", projectRoutes);
 // router.use("/daily-work-logs", dailyWorkLogRoutes);
-
-router.use("/reviewform", reviewFormRoutes);
 
 // router.use("/mentor-reviews", mentorReviewRoutes);
 // router.use("/final-feedbacks", finalFeedbackRoutes);
