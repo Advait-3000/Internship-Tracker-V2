@@ -27,14 +27,14 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.email || !formData.password) {
       // Should be handled by required attributes, but adding a failsafe
       return;
     }
 
     const resultAction = await dispatch(loginUser({ email: formData.email, password: formData.password }));
-    
+
     if (loginUser.fulfilled.match(resultAction)) {
       const { role } = resultAction.payload;
       if (role === 'Mentor') navigate('/mentor');
@@ -57,17 +57,20 @@ const SignIn = () => {
   return (
     <div className="flex min-h-screen lg:h-screen lg:overflow-hidden bg-[#F8FAFC] p-4 sm:p-6 lg:p-8 items-center justify-center">
       <div className="flex flex-col lg:flex-row w-full max-w-6xl bg-white rounded-[32px] shadow-lg overflow-hidden border border-gray-100 min-h-[680px]">
-        
+
         {/* ── Left Sign-In Form Section (Matching Reference Screenshot) ── */}
         <div className="flex w-full lg:w-1/2 items-center justify-center p-6 sm:p-10 lg:p-12 overflow-y-auto">
           <div className="w-full max-w-md">
-            
-            <div className="mb-6 text-center">
+            <div className="w-full max-w-md flex flex-col justify-center items-center">
+              <img src="logo.png" alt="" srcset="" width={200} height={200} />
+            </div>
+
+            {/* <div className="mb-6 text-center">
               <h1 className="text-3xl font-bold text-gray-900 mb-1.5">Sign in to Account</h1>
               <Link to="/signup" className="text-sm font-semibold text-blue-600 hover:underline">
                 Don&apos;t have an account? Sign up
               </Link>
-            </div>
+            </div> */}
 
             {error && (
               <div className="mb-4 p-3.5 bg-red-50 border border-red-200 text-red-600 text-xs font-semibold rounded-xl text-center">
@@ -80,7 +83,7 @@ const SignIn = () => {
               <p className="text-[11px] font-extrabold text-gray-600 uppercase tracking-wider mb-2 text-center">
                 Quick Login (Bypass Role Selection)
               </p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 <button
                   type="button"
                   onClick={() => handleDummyLogin('Admin')}
@@ -218,24 +221,24 @@ const SignIn = () => {
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-4 w-4 mr-2.5" />
                 Sign In with Google
               </button>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => handleDummyLogin('Admin')}
                 className="w-full flex items-center justify-center px-4 py-2.5 border border-gray-200 rounded-xl shadow-xs bg-white text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
               >
                 <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="h-4 w-4 mr-2.5" />
                 Continue with Facebook
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 type="button"
                 onClick={() => handleDummyLogin('Admin')}
                 className="w-full flex items-center justify-center px-4 py-2.5 border border-gray-200 rounded-xl shadow-xs bg-white text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
               >
                 <svg className="h-4 w-4 mr-2.5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.19 2.31-.88 3.5-1.15 2.14-.39 3.99.37 5.05 2.05-4.14 2.39-3.4 8.01 1.05 9.87-.93 2.11-2.42 4.19-4.68 1.4zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.19 2.31-.88 3.5-1.15 2.14-.39 3.99.37 5.05 2.05-4.14 2.39-3.4 8.01 1.05 9.87-.93 2.11-2.42 4.19-4.68 1.4zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                 </svg>
                 Continue with Apple
-              </button>
+              </button> */}
             </div>
 
           </div>
@@ -244,30 +247,31 @@ const SignIn = () => {
         {/* ── Right Feature Banner Section (Matching Reference Screenshot) ── */}
         <div className="flex w-full lg:w-1/2 p-4">
           <div className="w-full h-full rounded-[24px] bg-[#1E2047] bg-gradient-to-br from-[#1E2047] via-[#2F2150] to-[#E98292] relative overflow-hidden flex flex-col justify-between p-8 sm:p-10">
-            
+
             {/* Logo at Top Center */}
-            <div className="w-full flex justify-center z-20">
-              <img src="/logo.png" alt="Atharva University Mumbai" className="h-24 sm:h-28 object-contain" />
+            <div className="w-full flex justify-start z-20">
+              <img src="Logo_text.png" alt="Atharva University Mumbai" className="h-24 sm:h-48 object-contain" />
             </div>
 
             {/* Quote Section */}
-            <div className="z-20 w-full max-w-lg mx-auto my-auto relative px-2 sm:px-6 transform -translate-y-12 sm:-translate-y-20">
+            <div className="z-20 w-full h-full relative t-0 px-2 sm:px-6">
               <div className="flex flex-col">
-                <h1 className="text-5xl sm:text-6xl md:text-[5.5rem] font-serif font-extrabold text-white leading-[1.05] tracking-tight drop-shadow-md">
-                  Be the Change.
+                <h1 className="text-5xl font-serif font-extrabold text-white leading-[1.05] tracking-tight drop-shadow-md">
+                  Be the <br></br> Change.
                 </h1>
-                <h1 className="text-5xl sm:text-6xl md:text-[5.5rem] font-serif font-extrabold text-[#FBBF24] leading-[1.05] tracking-tight drop-shadow-md mt-2">
-                  Lead the Future.
+                <h1 className="text-5xl font-serif font-extrabold text-[#FBBF24] leading-[1.05] tracking-tight drop-shadow-md mt-2">
+                  Lead the <br></br> Future.
                 </h1>
               </div>
             </div>
 
             {/* Bottom Right Image matching screenshot */}
-            <div className="absolute bottom-0 right-0 w-[55%] sm:w-[48%] md:w-[45%] z-30 pointer-events-none">
+            <div className="absolute bottom-0 left-0 w-[55%] sm:w-[48%] md:w-[120%] z-30 pointer-events-none">
+              <img src="/skeleton .png" alt="" srcset="" className='absolute w-[120%] bottom-0 right-0 z-0'/>
               <img
                 src="/image.png"
                 alt="Shri Sunil Rane"
-                className="w-full h-auto object-contain object-bottom transform translate-x-[6%] translate-y-[2%]"
+                className="relative left-40 h-auto object-contain object-bottom transform translate-x-[6%] translate-y-[2%] w-[65%] z-1"
               />
             </div>
 
