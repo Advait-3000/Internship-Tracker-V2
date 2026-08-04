@@ -35,6 +35,7 @@ import AdminDashboard from "@/pages/admin/Dashboard/Dashboard";
 import AdminUsers from "@/pages/admin/Users/Users";
 import AdminInternships from "@/pages/admin/Internships/Internships";
 import AdminReports from "@/pages/admin/Reports/Reports";
+import AdminStudentView from "@/pages/admin/Students/StudentView";
 
 // SuperAdmin Pages
 import SuperAdminDashboard from "@/pages/superadmin/Dashboard/Dashboard";
@@ -86,6 +87,7 @@ const AppRouter = () => {
           <Route path={ROUTES.ADMIN.USERS} element={<AdminUsers />} />
           <Route path={ROUTES.ADMIN.INTERNSHIPS} element={<AdminInternships />} />
           <Route path={ROUTES.ADMIN.REPORTS} element={<AdminReports />} />
+          <Route path={ROUTES.ADMIN.STUDENT_PROFILE} element={<AdminStudentView />} />
         </Route>
 
         {/* SuperAdmin Routes */}

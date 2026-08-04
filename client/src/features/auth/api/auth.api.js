@@ -1,5 +1,6 @@
 import api from "@/shared/lib/axios";
 
+
 export const loginApi = async (credentials) => {
   const response = await api.post("/auth/login", credentials);
   return response.data;

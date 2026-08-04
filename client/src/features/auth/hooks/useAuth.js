@@ -8,9 +8,10 @@ export const useAuth = () => {
 
   const login = async (credentials) => {
     try {
-      const data = await loginApi(credentials);
-      dispatch(setCredentials(data));
-      return data;
+      const response = await loginApi(credentials);
+      const { user, accessToken } = response.data;
+      dispatch(setCredentials({ user, token: accessToken }));
+      return response.data;
     } catch (err) {
       throw err;
     }
@@ -18,9 +19,11 @@ export const useAuth = () => {
 
   const register = async (userData) => {
     try {
-      const data = await registerApi(userData);
-      dispatch(setCredentials(data));
-      return data;
+      const response = await registerApi(userData);
+      // Backend register does not return a token, just the user object
+      const user = response.data;
+      dispatch(setCredentials({ user, token: null }));
+      return { user };
     } catch (err) {
       throw err;
     }

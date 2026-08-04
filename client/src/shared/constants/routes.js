@@ -34,6 +34,7 @@ export const ROUTES = {
     USERS: '/admin/users',
     INTERNSHIPS: '/admin/internships',
     REPORTS: '/admin/reports',
+    STUDENT_PROFILE: '/admin/students/:studentId',
   },
 
   SUPERADMIN: {
