@@ -7,9 +7,9 @@ import { v4 as uuidv4 } from "uuid";
 
 import corsMiddleware from "./src/config/cors.js";
 import routeMap from "./src/routeMap.js";
-import { errorHandler } from "./src/middlewares/errorMiddleware.js";
-import { morganMiddleware } from "./src/middlewares/loggerMiddleware.js";
-import { apiLimiter } from "./src/middlewares/rateLimiterMiddleware.js";
+import { errorHandler } from "./src/middlewares/error.middleware.js";
+import { morganMiddleware } from "./src/middlewares/logger.middleware.js";
+import { apiLimiter } from "./src/middlewares/rateLimiter.middleware.js";
 
 const app = express();
 
