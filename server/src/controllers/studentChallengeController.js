@@ -1,4 +1,4 @@
-import StudentChallengeService from "../services/studentChallenge.service.js";
+import StudentChallengeService from "../services/studentChallengeService.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 

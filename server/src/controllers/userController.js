@@ -1,4 +1,4 @@
-import UserService from "../services/user.service.js";
+import UserService from "../services/userService.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 

@@ -1,4 +1,4 @@
-import WeeklyReportService from "../services/weeklyReport.service.js";
+import WeeklyReportService from "../services/weeklyReportService.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 

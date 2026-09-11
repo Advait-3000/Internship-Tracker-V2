@@ -1,4 +1,4 @@
-import LearningOutcomeService from "../services/learningOutcome.service.js";
+import LearningOutcomeService from "../services/learningOutcomeService.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
